@@ -1,5 +1,6 @@
 const colors = ['BCE784', '5DD39E', '348AA7', '525174', '513B56']
 
+
 const generateUniqueIndices = () => [...Array(colors.length).keys()];
 let uniqueIndices = [];
 
@@ -14,6 +15,10 @@ const grabRandomUniqueIndex = () => {
 export function bgColorGen() {
   let randomIndex = grabRandomUniqueIndex()
   const randomColor = colors[randomIndex];
-  console.log('color:', randomColor)
+  // console.log('color:', randomColor)
   return randomColor;
+}
+
+export function circleColorGen() {
+
 }

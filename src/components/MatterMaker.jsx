@@ -11,6 +11,7 @@ Matter.use('matter-attractors');
 export default function MatterMaker() {
   const [ isBlue, setIsBlue ] = useState(false);
   const [ backgroundColor, setBackgroundColor ] = useState('BCE784')
+  const [ gravityIsOn, setGravityIsOn] = useState(false);
   const canvasRef = useRef(null);
 
   // Matter aliases
@@ -35,14 +36,7 @@ export default function MatterMaker() {
     isStatic: true,
     angle: 0.7853981634
   });
-  const boxA = Bodies.rectangle(400, 200, 80, 80);
-  const boxC = Bodies.rectangle(400, 20, 80, 80);
-  const boxB = Bodies.rectangle(450, 50, 80, 80, {
-    render: {
-      fillStyle: 'orange',
-      strokeStyle: 'black'
-    }
-  });
+
 
   function handleNewSquareClick() {
     Composite.add(engine.world, createSquare())
@@ -53,6 +47,19 @@ export default function MatterMaker() {
   function handleNewGravityCircleClick() {
     Composite.add(engine.world, createGravityCircle())
   }
+  function handleGravityOn() {
+    engine.gravity.y = 1;
+    engine.gravity.scale = 0.001;
+    console.log(engine.gravity);
+    setGravityIsOn(prevState => !prevState)
+  }
+  function handleGravityOff() {
+    engine.gravity.y = 0;
+    engine.gravity.scale = 0;
+    console.log(engine.gravity)
+    setGravityIsOn(prevState => !prevState)
+  }
+
 
   useEffect(() => {
     // create a renderer
@@ -62,16 +69,20 @@ export default function MatterMaker() {
       options: {
         wireframes: false,
         background: `#${backgroundColor}`,
+        height: window.innerHeight * 0.8,
+        width: window.innerWidth * 0.8,
       },
     });
+
+    const gravityCircle = createGravityCircle(render.options.width / 2, render.options.height / 2)
 
      // event handlers
     const handleCollision = (e) => {
       const bodyA = e.pairs[0].bodyA;
       const bodyB = e.pairs[0].bodyB;
-      console.log(bodyA)
+      console.log(bodyB)
       if (bodyA.label !== 'Rectangle Body' && bodyB.label !== 'Rectangle Body') {
-        randomDrum();
+        randomDrum(bodyB.sound);
         // boxB.render.fillStyle = `#${bgColorGen()}`
         render.options.background = `#${bgColorGen()}`
       }
@@ -94,9 +105,9 @@ export default function MatterMaker() {
       }
     });
 
-    engine.gravity.scale = 0;
+    engine.gravity.y = 0;
     // add all of the bodies to the world
-    Composite.add(engine.world, [ground1]);
+    Composite.add(engine.world, [gravityCircle]);
     Composite.add(engine.world, mouseConstraint);
     // run the renderer
     Render.run(render);
@@ -110,8 +121,11 @@ export default function MatterMaker() {
     <div ref={canvasRef}>
       <button onClick={handleNewSquareClick}>new square</button>
       <button onClick={handleNewCircleClick}>new circle</button>
-      <button onClick={handleNewGravityCircleClick}>GRAVITY</button>
+      <button onClick={handleNewGravityCircleClick}>more black holes</button>
+      <button onClick={handleGravityOff}>Gravity off</button>
+      <button onClick ={handleGravityOn}>Gravity on</button>
       {isBlue ? <p style={{ color: 'red' }}>hello</p> : <p>hello</p>}
     </div>
   )
 }
+
