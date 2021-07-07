@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-import randomDrum from './drums';
+import randomSound from './sounds';
 import { debounce } from 'debounce';
 import Matter from 'matter-js';
 import { bgColorGen } from '../utils/colorGen';
-import { createSquare, createCircle, createGravityCircle } from './bodies';
+import { createSquare, createCircle, createDroneCircle, createGravityCircle } from './bodies';
 
 Matter.use('matter-attractors');
 
@@ -44,8 +44,19 @@ export default function MatterMaker() {
   function handleNewCircleClick() {
     Composite.add(engine.world, createCircle())
   }
+  function handleNewDroneCircleClick() {
+    Composite.add(engine.world, createDroneCircle())
+  }
   function handleNewGravityCircleClick() {
     Composite.add(engine.world, createGravityCircle())
+  }
+  function handleDeleteAllBodiesClick() {
+    const allBodies = Composite.allBodies(engine.world);
+    allBodies.forEach(body => {
+      if (body.id !== 6) {
+        Composite.remove(engine.world, body)
+      }
+    })
   }
   function handleGravityOn() {
     engine.gravity.y = 1;
@@ -77,22 +88,34 @@ export default function MatterMaker() {
     const gravityCircle = createGravityCircle(render.options.width / 2, render.options.height / 2)
 
      // event handlers
-    const handleCollision = (e) => {
+    const handleCollisionStart = (e) => {
+      console.log('event:', e);
       const bodyA = e.pairs[0].bodyA;
       const bodyB = e.pairs[0].bodyB;
       console.log(bodyB)
       if (bodyA.label !== 'Rectangle Body' && bodyB.label !== 'Rectangle Body') {
-        randomDrum(bodyB.sound);
+        const playedSound = randomSound(bodyB.sound);
         // boxB.render.fillStyle = `#${bgColorGen()}`
         render.options.background = `#${bgColorGen()}`
       }
     }
-    const debouncedHandleCollision = debounce(handleCollision, 50, true);
+    const handleCollisionEnd = (e) => {
+      const bodyA = e.pairs[0].bodyA;
+      const bodyB = e.pairs[0].bodyB;
+      console.log(bodyB)
+
+        randomSound(bodyB.sound);
+        // boxB.render.fillStyle = `#${bgColorGen()}`
+        render.options.background = `#${bgColorGen()}`
+
+    }
+    const debouncedHandleCollisionStart = debounce(handleCollisionStart, 50, true);
 
 
 
     // event listeners
-    Events.on(engine, 'collisionStart', (e) => debouncedHandleCollision(e));
+    Events.on(engine, 'collisionStart', (e) => debouncedHandleCollisionStart(e));
+    // Events.on(engine, 'collisionEnd', (e) => handleCollisionEnd(e));
 
     const mouse = Mouse.create(render.canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
@@ -115,15 +138,16 @@ export default function MatterMaker() {
     const runner = Runner.create();
     // run the engine
     Runner.run(runner, engine);
+    console.log(engine.world)
   }, [])
 
   return (
     <div ref={canvasRef}>
-      <button onClick={handleNewSquareClick}>new square</button>
       <button onClick={handleNewCircleClick}>new circle</button>
       <button onClick={handleNewGravityCircleClick}>more black holes</button>
-      <button onClick={handleGravityOff}>Gravity off</button>
-      <button onClick ={handleGravityOn}>Gravity on</button>
+      <button onClick ={handleNewDroneCircleClick}>Drones</button>
+      <button onClick={handleGravityOn}>Gravity on</button>
+      <button onClick={handleDeleteAllBodiesClick}>Delete small balls</button>
       {isBlue ? <p style={{ color: 'red' }}>hello</p> : <p>hello</p>}
     </div>
   )

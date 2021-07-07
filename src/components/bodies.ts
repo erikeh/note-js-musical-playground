@@ -6,37 +6,48 @@ interface usefulBody extends Matter.Body {
   sound?: string;
 }
 
+const soundColorOptionsDrone = {
+  1: {
+    sound: 'drone1',
+    color: '#6D466B'
+  },
+  2: {
+    sound: 'drone2',
+    color: '#B49FCC'
+  },
+}
+
 const soundColorOptions = {
   1: {
-    sound: 'kick',
+    sound: 'notes1',
     color: '#EB9486'
   },
   2: {
-    sound: 'perc1',
+    sound: 'notes2',
     color: '#D5573B',
   },
   3: {
-    sound: 'perc2',
+    sound: 'notes3',
     color: '#885053'
   },
   4: {
-    sound: 'perc3',
+    sound: 'notes4',
     color: '#80A1C1'
   },
   5: {
-    sound: 'shaker',
+    sound: 'notes4',
     color: '#D5CAD6'
   },
   6: {
-    sound: 'tamb',
+    sound: 'notes3',
     color: '#80A1C1'
   },
 }
-function selectRandomOption() {
-  const optionKeys = Object.keys(soundColorOptions)
+function selectRandomOption(option) {
+  const optionKeys = Object.keys(option)
   const randomIndex = Math.floor(Matter.Common.random(1, Number(optionKeys[optionKeys.length - 1]) + 1))
   console.log(randomIndex)
-  return soundColorOptions[randomIndex]
+  return option[randomIndex]
 }
 
 export function createSquare(
@@ -53,7 +64,23 @@ export function createCircle(
   y = Math.random() * 200,
   radius = Math.random() * 60 + 10
 ) {
-  const option = selectRandomOption();
+  const option = selectRandomOption(soundColorOptions);
+  const circle: usefulBody = Matter.Bodies.circle(x, y, radius, {
+    restitution: 0.8,
+    render : {
+      fillStyle: option.color,
+    }
+  });
+  circle.sound = option.sound;
+  return circle;
+}
+
+export function createDroneCircle(
+  x = Math.random() * 200 + 200,
+  y = Math.random() * 200,
+  radius = Math.random() * 20 + 40
+) {
+  const option = selectRandomOption(soundColorOptionsDrone);
   const circle: usefulBody = Matter.Bodies.circle(x, y, radius, {
     restitution: 0.8,
     render : {
@@ -72,7 +99,7 @@ export function createGravityCircle(
   return Matter.Bodies.circle(x, y, radius, {
     render: {
       fillStyle: 'black',
-      lineWidth: 4,
+      lineWidth: 0,
       strokeStyle: 'white',
     },
     plugin: {
