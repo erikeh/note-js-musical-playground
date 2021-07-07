@@ -1,5 +1,6 @@
 import React from 'react';
 import MatterMaker from './components/MatterMaker';
+import Test from './components/test';
 import styled from 'styled-components';
 import './App.css';
 
@@ -12,6 +13,7 @@ function App() {
   return (
     <CenteredDiv>
       <MatterMaker/>
+      {/* <Test /> */}
     </CenteredDiv>
   );
 }

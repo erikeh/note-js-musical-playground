@@ -1,4 +1,6 @@
 import Matter from 'matter-js';
+import MatterAttractors from 'matter-attractors';
+Matter.use(MatterAttractors);
 
 export function createSquare(
   x = Math.random() * 400,
@@ -14,5 +16,26 @@ export function createCircle(
   y = Math.random() * 200,
   radius = Math.random() * 60 + 10
 ) {
-  return Matter.Bodies.circle(x, y, radius);
+  return Matter.Bodies.circle(x, y, radius, {
+    restitution: 0.8,
+  });
+}
+
+export function createGravityCircle(
+  x = 200,
+  y = 200,
+  radius = 30,
+) {
+  return Matter.Bodies.circle(x, y, radius, {
+    plugin: {
+      attractors: [
+        function(bodyA, bodyB) {
+          return {
+            x: (bodyA.position.x - bodyB.position.x) * 1e-6,
+            y: (bodyA.position.y - bodyB.position.y) * 1e-6,
+          }
+        }
+      ]
+    }
+  })
 }

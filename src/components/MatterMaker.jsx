@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Howl, Howler } from 'howler';
+
 import randomDrum from './drums';
 import { debounce } from 'debounce';
 import Matter from 'matter-js';
 import { bgColorGen } from '../utils/colorGen';
-import { createSquare, createCircle } from './bodies';
+import { createSquare, createCircle, createGravityCircle } from './bodies';
 
+Matter.use('matter-attractors');
 
 export default function MatterMaker() {
   const [ isBlue, setIsBlue ] = useState(false);
@@ -26,11 +27,11 @@ export default function MatterMaker() {
   const engine = Engine.create();
 
   // create bodies
-  const ground1 = Bodies.rectangle(600, 410, 310, 30, {
+  const ground1 = Bodies.rectangle(600, 610, 810, 30, {
     isStatic: true,
-    angle: 2.3561944902
+    // angle: 2.3561944902
   });
-  const ground2 = Bodies.rectangle(240, 410, 310, 30, {
+  const ground2 = Bodies.rectangle(200, 410, 310, 30, {
     isStatic: true,
     angle: 0.7853981634
   });
@@ -49,6 +50,9 @@ export default function MatterMaker() {
   function handleNewCircleClick() {
     Composite.add(engine.world, createCircle())
   }
+  function handleNewGravityCircleClick() {
+    Composite.add(engine.world, createGravityCircle())
+  }
 
   useEffect(() => {
     // create a renderer
@@ -65,13 +69,14 @@ export default function MatterMaker() {
     const handleCollision = (e) => {
       const bodyA = e.pairs[0].bodyA;
       const bodyB = e.pairs[0].bodyB;
-      if (bodyA.id !== 8) {
+      console.log(bodyA)
+      if (bodyA.label !== 'Rectangle Body' && bodyB.label !== 'Rectangle Body') {
         randomDrum();
         // boxB.render.fillStyle = `#${bgColorGen()}`
         render.options.background = `#${bgColorGen()}`
       }
     }
-    const debouncedHandleCollision = debounce(handleCollision, 100, true);
+    const debouncedHandleCollision = debounce(handleCollision, 50, true);
 
 
 
@@ -89,8 +94,9 @@ export default function MatterMaker() {
       }
     });
 
+    engine.gravity.scale = 0;
     // add all of the bodies to the world
-    Composite.add(engine.world, [ground1, ground2]);
+    Composite.add(engine.world, [ground1]);
     Composite.add(engine.world, mouseConstraint);
     // run the renderer
     Render.run(render);
@@ -104,6 +110,7 @@ export default function MatterMaker() {
     <div ref={canvasRef}>
       <button onClick={handleNewSquareClick}>new square</button>
       <button onClick={handleNewCircleClick}>new circle</button>
+      <button onClick={handleNewGravityCircleClick}>GRAVITY</button>
       {isBlue ? <p style={{ color: 'red' }}>hello</p> : <p>hello</p>}
     </div>
   )
