@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@types/howler": "^2.2.3",
-    "@types/matter-js": "^0.17.1"
+    "@types/matter-js": "^0.17.1",
+    "@types/styled-components": "^5.1.11"
   }
 }
