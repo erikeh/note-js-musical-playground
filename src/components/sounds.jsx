@@ -3,18 +3,27 @@ import { Howl, Howler } from 'howler';
 import Matter from 'matter-js';
 
 
-const randomSound = (sound) => {
-  const sounds = ['kick', 'perc1', 'perc2', 'perc3', 'shaker', 'tamb']
+export const randomSound = (sound) => {
   if (sound) {
     const note = new Howl({
-      src: [`${process.env.PUBLIC_URL}/audio/${sound}.mp3`],
-      volume: 1
+      src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
+      volume: 0.5
     })
     note.play();
-    console.log(note);
+
     return note;
   }
 
 }
 
-export default randomSound;
+export const randomChord = (sound) => {
+  if (sound) {
+    const chord = new Howl({
+      src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
+      volume: 0.5
+    })
+    chord.play();
+    return chord;
+  }
+}
+
