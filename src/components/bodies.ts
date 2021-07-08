@@ -21,7 +21,15 @@ function selectRandomOption(option) {
   return option[randomIndex]
 }
 
+// useful data store
 let keyMemo: number;
+
+function randomAngle() {
+  let angle = Math.random() * Math.PI*2;
+  console.log(angle);
+  return angle;
+}
+
 function selectNextOption(option) {
   const optionKeys = Object.keys(option);
   function nextIndex() {
@@ -59,6 +67,9 @@ export function createChordSquare(
   const option = selectNextOption(soundColorOptionsChord)
   const square: usefulBody = Matter.Bodies.rectangle(x, y, width, height, {
     restitution: 2.2,
+    collisionFilter: {
+      group: -1,
+    },
     render : {
       fillStyle: option.color,
     }
@@ -72,13 +83,16 @@ export function createChordSquare(
 }
 
 export function createCircle(
-  x = Math.random() * 800 - 400,
-  y = Math.random() * 200 + 200,
+  x = Math.random() * (window.innerWidth * 0.8),
+  y = Math.random() * (window.innerHeight * 0.8),
   radius = Math.random() * 30 + 10
 ) {
   const option = selectRandomOption(soundColorOptionsPluck);
   const circle: usefulBody = Matter.Bodies.circle(x, y, radius, {
-    restitution: 1.5,
+    restitution: 1,
+    frictionAir: 0,
+    friction: 0,
+    frictionStatic: 0,
     collisionFilter: {
       group: -1
     },
@@ -97,7 +111,10 @@ export function createDroneCircle(
 ) {
   const option = selectRandomOption(soundColorOptionsDrone);
   const circle: usefulBody = Matter.Bodies.polygon(x, y, 6, Matter.Common.random(25, 40), {
-    restitution: 0.8,
+    restitution: 0,
+    collisionFilter: {
+      group: -1,
+    },
     label: 'droneCircle',
     render : {
       fillStyle: option.color,
@@ -113,7 +130,7 @@ export function createGravityCircle(
   radius = 90,
 ) {
   return Matter.Bodies.circle(x, y, radius, {
-    density: 100,
+    density: 10000,
     label: 'gravityCircle',
     isStatic: true,
     render: {

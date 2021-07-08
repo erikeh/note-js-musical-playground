@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
-import {randomSound, randomChord } from './sounds';
+import { useDispatch, useSelector } from 'react-redux';
+import allActions from '../actions/allActions';
+// import {randomSound, randomChord } from './sounds';
 import { debounce } from 'debounce';
 import Matter, { Body } from 'matter-js';
 import { bgColorGen } from '../utils/colorGen';
 import { createSquare, createCircle, createDroneCircle, createChordSquare, createGravityCircle } from './bodies';
+import { Howl, Howler } from 'howler'
 import styled from 'styled-components';
+import { Button } from 'bulma-styled-components';
+import { RootState } from '../app/store'
+import { ActionCreatorWithOptionalPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
 Matter.use('matter-attractors');
 
@@ -15,10 +21,68 @@ const ButtonContainer = styled.div`
 const AbsoluteContainer = styled.div`
   position: absolute;
 `
+const MainButton = styled(Button)`
+  height: 30px;
+  border-radius: 2px;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+`
+
 
 export default function MatterMaker() {
-  const [ gravityIsOn, setGravityIsOn] = useState(false);
+  const dispatch = useDispatch();
+  const { addSound, removeSound } = allActions;
+  const [ dronePlaying, setDronePlaying ] = useState(null)
+  const currentlyPlaying = useSelector((state: RootState) => state.currentlyPlaying)
+
   const canvasRef = useRef(null);
+
+  const randomSound = (sound) => {
+    if (sound) {
+      const note = new Howl({
+        src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
+        volume: 0.5,
+      })
+      note.play();
+      return note;
+    }
+  }
+
+
+    const drone1 = new Howl({
+      src: [`${process.env.PUBLIC_URL}/audio/drone1.mp3`],
+      volume: 0.5,
+      loop: true,
+    })
+    const drone2 = new Howl({
+      src: [`${process.env.PUBLIC_URL}/audio/drone2.mp3`],
+      volume: 0.5,
+      loop: true,
+    })
+
+  const drones = [drone1, drone2]
+
+
+
+  const randomDrone = () => {
+    let randomDroneIndex = Math.floor(Math.random() * drones.length);
+    console.log(randomDroneIndex)
+    setDronePlaying(randomDroneIndex)
+    return drones[randomDroneIndex]
+  }
+
+  const randomChord = (sound) => {
+    if (sound) {
+      const chord = new Howl({
+        src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
+        volume: 0.5
+      })
+      chord.play();
+      return chord;
+    }
+  }
 
   // Matter aliases
   const Engine = Matter.Engine,
@@ -68,7 +132,6 @@ export default function MatterMaker() {
     engine.gravity.y = 1;
     engine.gravity.scale = 0.001;
     console.log(engine.gravity);
-    setGravityIsOn(prevState => !prevState)
   }
 
   useEffect(() => {
@@ -102,35 +165,35 @@ export default function MatterMaker() {
       render.options.background = `#${bgColorGen()}`
     }
     const handleDroneCollisionStart = (e) => {
-      const pairs = e.pairs[0]
-      console.log('drone objects: ', pairs)
-      const collidedCircle = e.pairs[0].bodyB;
-      randomSound(collidedCircle.sound);
+      drone1.play();
+      drone1.fade(0, 0.5, 120)
     }
-    const handleCollisionEnd = (e) => {
-      const bodyA = e.pairs[0].bodyA;
-      const bodyB = e.pairs[0].bodyB;
-
-      randomSound(bodyB.sound);
-        // boxB.render.fillStyle = `#${bgColorGen()}`
-      render.options.background = `#${bgColorGen()}`
+    const handleDroneCollisionEnd = (e) => {
+      const pairs = e.pairs[0];
+      const bodyB = pairs.bodyB;
+      if (bodyB.label === 'droneCircle') {
+        drone1.fade(0.5, 0, 50)
+        drone1.pause()
+      }
     }
 
     const debouncedHandleNoteCollisionStart = debounce(handleNoteCollisionStart, 10, true);
     const debouncedHandleChordCollisionStart = debounce(handleChordCollisionStart, 1000, true);
-    const debouncedHandleDroneCollisionStart = debounce(handleDroneCollisionStart, 5000, true)
-
+    const debouncedHandleDroneCollisionStart = debounce(handleDroneCollisionStart, 100, true)
+    const debouncedHandleDroneCollisionEnd = debounce(handleDroneCollisionEnd, 400, true);
     // event listeners
     Events.on(engine, 'collisionStart', (e) => {
       const pairs = e.pairs[0];
       if (pairs.bodyB.label === 'Rectangle Body') {
         debouncedHandleChordCollisionStart(e)
-      } else if (pairs.bodyB.label === 'droneCircle' || pairs.bodyA.label === 'droneCircle') {
+      } else if (pairs.bodyB.label === 'droneCircle') {
         debouncedHandleDroneCollisionStart(e)
       } else {
         debouncedHandleNoteCollisionStart(e)
       }
     });
+
+    Events.on(engine, 'collisionEnd', debouncedHandleDroneCollisionEnd)
 
     Events.on(engine, 'afterUpdate', () => {
       const height = render.options.height;
@@ -188,12 +251,12 @@ export default function MatterMaker() {
     <div ref={canvasRef}>
       <ButtonContainer>
         <AbsoluteContainer>
-          <button onClick={handleNewCircleClick}>new circle</button>
-          <button onClick={handleNewGravityCircleClick}>more black holes</button>
-          <button onClick ={handleNewChordSquareClick}>Chord</button>
-          <button onClick ={handleNewDroneCircleClick}>Drones</button>
-          <button onClick={handleGravityOn}>Gravity on</button>
-          <button onClick={handleDeleteAllBodiesClick}>Delete small balls</button>
+          <MainButton onClick={handleNewCircleClick}>new circle</MainButton>
+          <MainButton onClick={handleNewGravityCircleClick}>more black holes</MainButton>
+          <MainButton onClick ={handleNewChordSquareClick}>Chord</MainButton>
+          <MainButton onClick ={handleNewDroneCircleClick}>Drones</MainButton>
+          <MainButton onClick={handleGravityOn}>Gravity on</MainButton>
+          <MainButton onClick={handleDeleteAllBodiesClick}>Delete small balls</MainButton>
         </AbsoluteContainer>
       </ButtonContainer>
     </div>

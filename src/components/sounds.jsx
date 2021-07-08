@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux';
 import { Howl, Howler } from 'howler';
 import Matter from 'matter-js';
 
-
-export const randomSound = (sound) => {
+const randomSound = (sound) => {
   if (sound) {
     const note = new Howl({
       src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
-      volume: 0.5
+      volume: 0.5,
+      onend: () => {
+
+      }
     })
     note.play();
 
@@ -16,7 +19,7 @@ export const randomSound = (sound) => {
 
 }
 
-export const randomChord = (sound) => {
+const randomChord = (sound) => {
   if (sound) {
     const chord = new Howl({
       src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
@@ -25,5 +28,10 @@ export const randomChord = (sound) => {
     chord.play();
     return chord;
   }
+}
+const Sounds = () => {
+
+  const dispatch = useDispatch();
+
 }
 
