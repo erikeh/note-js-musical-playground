@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { fixedSound, randomChord, drone1 } from './sounds';
 import { debounce } from 'debounce';
 import Matter, { Body } from 'matter-js';
@@ -27,7 +27,14 @@ const MainButton = styled(Button)`
   }
 `
 
-const IconButton = styled(Icon)`
+const IconButton = styled.button`
+  background: none;
+	/* color: inherit; */
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
   font-size: 25px;
   padding: 15px 25px 0 25px;
   &:hover {
@@ -45,6 +52,8 @@ export default function MatterMaker(props) {
     handleOneShotRectangleAnimationStart,
   } = props
   const canvasRef = useRef(null);
+
+  let ballInstructionsPlaying = false;
 
   // Matter aliases
   const Engine = Matter.Engine,
@@ -70,6 +79,8 @@ export default function MatterMaker(props) {
     if (!playedBall) {
       handleBallAnimationStart();
       playedBall = true;
+      ballInstructionsPlaying = true;
+      setTimeout(() => ballInstructionsPlaying = false, 3000)
     }
     Composite.add(engine.world, createCircle())
   }
@@ -82,12 +93,14 @@ export default function MatterMaker(props) {
     Composite.add(engine.world, createRandomTriangle())
   }
 
-  function handleNewDroneCircleClick() {
+  function handleNewDroneHexagonClick() {
     if (!playedDrone) {
       handleDroneHexagonAnimationStart();
       playedDrone = true;
     }
+
     Composite.add(engine.world, createDroneCircle())
+
   }
 
   function handleNewGravityCircleClick() {
@@ -161,12 +174,22 @@ export default function MatterMaker(props) {
     const handleDroneCollisionStart = (e) => {
       drone1.play();
       drone1.fade(0, 0.5, 120)
-      gravityCircle.render.fillStyle = '#79ADDC';
+      Composite.allBodies(engine.world).forEach(body => {
+        if (body.label === 'gravityCircle') {
+          body.render.fillStyle = '#79ADDC'
+        }
+      })
+      // gravityCircle.render.fillStyle = '#79ADDC';
     }
     const handleDroneCollisionEnd = (e) => {
       drone1.fade(0.5, 0, 50)
       drone1.once('fade', drone1.pause)
-      gravityCircle.render.fillStyle = 'black';
+      Composite.allBodies(engine.world).forEach(body => {
+        if (body.label === 'gravityCircle') {
+          body.render.fillStyle = 'black'
+        }
+      })
+      // gravityCircle.render.fillStyle = 'black';
     }
 
     const debouncedHandleNoteCollisionStart = debounce(handleNoteCollisionStart, 10, true);
@@ -277,7 +300,7 @@ export default function MatterMaker(props) {
               whileHover={{ scale: 1.1 }}
             />
           </IconButton>
-          <IconButton onClick={handleNewDroneCircleClick}>
+          <IconButton onClick={handleNewDroneHexagonClick}>
             <motion.i
               className="fas fa-om"
               whileHover={{ scale: 1.1 }}

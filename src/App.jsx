@@ -120,6 +120,7 @@ function App() {
     await ballInstructionsControl.start('visible')
     await new Promise(r => setTimeout(r, 2000))
     await ballInstructionsControl.start('hidden')
+
   }
   async function handleTriangleAnimationStart() {
     await triangleInstructionsControl.start('visible')
