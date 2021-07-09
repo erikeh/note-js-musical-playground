@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react'
-import { fixedSound, randomSound, randomChord, drone1 } from './sounds';
+import { fixedSound, randomChord, drone1 } from './sounds';
 import { debounce } from 'debounce';
 import Matter, { Body } from 'matter-js';
 import { bgColorGen } from '../utils/colorGen';
 import { createCircle, createRandomTriangle, createDroneCircle, createChordSquare, createGravityCircle } from './bodies';
 import styled from 'styled-components';
-import { Button } from 'bulma-styled-components';
-import { RootState } from '../app/store'
+import { Button, Icon } from 'bulma-styled-components';
+import { motion } from 'framer-motion'
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 Matter.use('matter-attractors');
 
@@ -26,8 +27,23 @@ const MainButton = styled(Button)`
   }
 `
 
+const IconButton = styled(Icon)`
+  font-size: 25px;
+  padding: 15px 25px 0 25px;
+  &:hover {
+    cursor: pointer;
+  }
+`
 
-export default function MatterMaker() {
+
+export default function MatterMaker(props) {
+  const {
+    handleBallAnimationStart,
+    handleTriangleAnimationStart,
+    handleGravityBallAnimationStart,
+    handleDroneHexagonAnimationStart,
+    handleOneShotRectangleAnimationStart,
+  } = props
   const canvasRef = useRef(null);
 
   // Matter aliases
@@ -42,22 +58,54 @@ export default function MatterMaker() {
   // create an engine
   const engine = Engine.create();
 
+  let playedBall = false;
+  let playedTriangle = false;
+  let playedGravityBall = false;
+  let playedOneShot = false;
+  let playedDrone = false;
+
+
   // event handlers
   function handleNewCircleClick() {
+    if (!playedBall) {
+      handleBallAnimationStart();
+      playedBall = true;
+    }
     Composite.add(engine.world, createCircle())
   }
-  function handleNewRandomCircleClick() {
+
+  function handleNewRandomTriangleClick() {
+    if (!playedTriangle) {
+      handleTriangleAnimationStart();
+      playedTriangle = true;
+    }
     Composite.add(engine.world, createRandomTriangle())
   }
+
   function handleNewDroneCircleClick() {
+    if (!playedDrone) {
+      handleDroneHexagonAnimationStart();
+      playedDrone = true;
+    }
     Composite.add(engine.world, createDroneCircle())
   }
+
   function handleNewGravityCircleClick() {
+    if (!playedGravityBall) {
+      handleGravityBallAnimationStart();
+      playedGravityBall = true;
+    }
     Composite.add(engine.world, createGravityCircle())
   }
-  function handleNewChordSquareClick() {
+
+  function handleNewOneShotRectangleClick() {
+    if (!playedOneShot) {
+      handleOneShotRectangleAnimationStart();
+      playedOneShot = true;
+    }
     Composite.add(engine.world, createChordSquare())
   }
+
   function handleDeleteAllBodiesClick() {
     const allBodies = Composite.allBodies(engine.world);
     allBodies.forEach(body => {
@@ -73,6 +121,7 @@ export default function MatterMaker() {
   }
 
   useEffect(() => {
+    console.log('innerwidth', window.innerWidth)
     // create a renderer
     const render = Render.create({
       element: canvasRef.current || document.body,
@@ -210,13 +259,42 @@ export default function MatterMaker() {
     <div ref={canvasRef}>
       <ButtonContainer>
         <AbsoluteContainer>
-          <MainButton onClick={handleNewCircleClick}>new circle</MainButton>
-          <MainButton onClick={handleNewRandomCircleClick}>new random circle</MainButton>
-          <MainButton onClick={handleNewGravityCircleClick}>more black holes</MainButton>
-          <MainButton onClick ={handleNewChordSquareClick}>Chord</MainButton>
-          <MainButton onClick ={handleNewDroneCircleClick}>Drones</MainButton>
-          <MainButton onClick={handleGravityOn}>Gravity on</MainButton>
-          <MainButton onClick={handleDeleteAllBodiesClick}>Delete small balls</MainButton>
+          <IconButton onClick={handleNewCircleClick}>
+            <motion.i
+              className="fa fa-music"
+              whileHover={{ scale: 1.1 }}
+            />
+          </IconButton>
+          <IconButton onClick={handleNewRandomTriangleClick}>
+            <motion.i
+              className="fas fa-exclamation-triangle"
+              whileHover={{ scale: 1.1 }}
+            />
+          </IconButton>
+          <IconButton onClick={handleNewGravityCircleClick}>
+            <motion.i
+              className="fas fa-circle"
+              whileHover={{ scale: 1.1 }}
+            />
+          </IconButton>
+          <IconButton onClick={handleNewDroneCircleClick}>
+            <motion.i
+              className="fas fa-om"
+              whileHover={{ scale: 1.1 }}
+            />
+          </IconButton>
+          <IconButton onClick={handleNewOneShotRectangleClick}>
+            <motion.i
+              className="fas fa-bahai"
+              whileHover={{ scale: 1.1 }}
+            />
+          </IconButton>
+          <IconButton onClick={handleDeleteAllBodiesClick}>
+            <motion.i
+              className="far fa-trash-alt"
+              whileHover={{ scale: 1.1 }}
+            />
+          </IconButton>
         </AbsoluteContainer>
       </ButtonContainer>
     </div>

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -15,6 +16,7 @@
     "bulma": "^0.9.3",
     "bulma-styled-components": "^1.0.2",
     "debounce": "^1.2.1",
+    "framer-motion": "^4.1.17",
     "howler": "^2.2.3",
     "matter-attractors": "^0.1.6",
     "matter-js": "^0.17.1",

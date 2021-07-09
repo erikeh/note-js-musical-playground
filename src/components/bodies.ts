@@ -51,14 +51,14 @@ function selectNextOption(option) {
 
 // create bodies
 export function createChordSquare(
-  x = Math.random() * 400,
-  y = Math.random() * 200,
+  x = Math.random() * (window.innerWidth * 0.8),
+  y = Math.random() * (window.innerHeight * 0.8),
   width = 40,
   height = 60
   ) {
   const option = selectNextOption(soundColorOptionsOneShot)
   const square: usefulBody = Matter.Bodies.rectangle(x, y, width, height, {
-    restitution: 2.2,
+    restitution: 2.5,
     collisionFilter: {
       group: -1,
     },
@@ -99,11 +99,11 @@ export function createCircle(
 export function createRandomTriangle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
-  radius = Math.random() * 30 + 10
+  radius = Math.random() * 30 + 20
 ) {
   const option = selectRandomOption(soundColorOptionsPluck);
   const triangle: usefulBody = Matter.Bodies.polygon(x, y, 3, radius, {
-    restitution: 1.2,
+    restitution: 1.1,
     frictionAir: 0,
     friction: 0,
     frictionStatic: 0,
@@ -124,8 +124,8 @@ export function createRandomTriangle(
 }
 
 export function createDroneCircle(
-  x = Math.random() * 200 + 200,
-  y = Math.random() * 200,
+  x = window.innerWidth * 0.2,
+  y = window.innerHeight * 0.2,
   radius = Math.random() * 20 + 40
 ) {
   const option = selectRandomOption(soundColorOptionsDrone);
@@ -144,8 +144,8 @@ export function createDroneCircle(
 }
 
 export function createGravityCircle(
-  x = Math.random() * 300,
-  y = Math.random() * 400,
+  x = Math.random() * (window.innerWidth * 0.8),
+  y = Math.random() * (window.innerHeight * 0.8),
   radius = 90,
 ) {
   return Matter.Bodies.circle(x, y, radius, {
