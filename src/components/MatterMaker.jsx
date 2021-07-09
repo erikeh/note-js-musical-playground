@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import allActions from '../actions/allActions';
-// import {randomSound, randomChord } from './sounds';
+import React, { useEffect, useRef } from 'react'
+import { fixedSound, randomSound, randomChord, drone1 } from './sounds';
 import { debounce } from 'debounce';
 import Matter, { Body } from 'matter-js';
 import { bgColorGen } from '../utils/colorGen';
-import { createSquare, createCircle, createDroneCircle, createChordSquare, createGravityCircle } from './bodies';
-import { Howl, Howler } from 'howler'
+import { createCircle, createRandomTriangle, createDroneCircle, createChordSquare, createGravityCircle } from './bodies';
 import styled from 'styled-components';
 import { Button } from 'bulma-styled-components';
 import { RootState } from '../app/store'
-import { ActionCreatorWithOptionalPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
 Matter.use('matter-attractors');
 
@@ -32,63 +28,12 @@ const MainButton = styled(Button)`
 
 
 export default function MatterMaker() {
-  const dispatch = useDispatch();
-  const { addSound, removeSound } = allActions;
-  const [ dronePlaying, setDronePlaying ] = useState(null)
-  const currentlyPlaying = useSelector((state: RootState) => state.currentlyPlaying)
-
   const canvasRef = useRef(null);
-
-  const randomSound = (sound) => {
-    if (sound) {
-      const note = new Howl({
-        src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
-        volume: 0.5,
-      })
-      note.play();
-      return note;
-    }
-  }
-
-
-    const drone1 = new Howl({
-      src: [`${process.env.PUBLIC_URL}/audio/drone1.mp3`],
-      volume: 0.5,
-      loop: true,
-    })
-    const drone2 = new Howl({
-      src: [`${process.env.PUBLIC_URL}/audio/drone2.mp3`],
-      volume: 0.5,
-      loop: true,
-    })
-
-  const drones = [drone1, drone2]
-
-
-
-  const randomDrone = () => {
-    let randomDroneIndex = Math.floor(Math.random() * drones.length);
-    console.log(randomDroneIndex)
-    setDronePlaying(randomDroneIndex)
-    return drones[randomDroneIndex]
-  }
-
-  const randomChord = (sound) => {
-    if (sound) {
-      const chord = new Howl({
-        src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
-        volume: 0.5
-      })
-      chord.play();
-      return chord;
-    }
-  }
 
   // Matter aliases
   const Engine = Matter.Engine,
   Render = Matter.Render,
   Runner = Matter.Runner,
-  Bodies = Matter.Bodies,
   Composite = Matter.Composite,
   Events = Matter.Events,
   Mouse = Matter.Mouse,
@@ -97,19 +42,12 @@ export default function MatterMaker() {
   // create an engine
   const engine = Engine.create();
 
-  // create bodies
-  const ground1 = Bodies.rectangle(600, 610, 810, 30, {
-    isStatic: true,
-    // angle: 2.3561944902
-  });
-  const ground2 = Bodies.rectangle(200, 410, 310, 30, {
-    isStatic: true,
-    angle: 0.7853981634
-  });
-
   // event handlers
   function handleNewCircleClick() {
     Composite.add(engine.world, createCircle())
+  }
+  function handleNewRandomCircleClick() {
+    Composite.add(engine.world, createRandomTriangle())
   }
   function handleNewDroneCircleClick() {
     Composite.add(engine.world, createDroneCircle())
@@ -151,9 +89,16 @@ export default function MatterMaker() {
 
      // collision handlers
     const handleNoteCollisionStart = (e) => {
-      // console.log('event:', e.pairs[0]);
       const bodyB = e.pairs[0].bodyB;
-      randomSound(bodyB.sound);
+      fixedSound(bodyB.sound);
+    }
+    const handleRandomNoteCollisionStart = (e) => {
+      const collidedTriangle = e.pairs[0].bodyB;
+      fixedSound(collidedTriangle.sound);
+
+      const nextNoteOption = collidedTriangle.nextRandomNote();
+      collidedTriangle.render.fillStyle = nextNoteOption.color;
+      collidedTriangle.sound = nextNoteOption.sound;
     }
     const handleChordCollisionStart = (e) => {
       const collidedSquare = e.pairs[0].bodyB;
@@ -167,33 +112,47 @@ export default function MatterMaker() {
     const handleDroneCollisionStart = (e) => {
       drone1.play();
       drone1.fade(0, 0.5, 120)
+      gravityCircle.render.fillStyle = '#79ADDC';
     }
     const handleDroneCollisionEnd = (e) => {
-      const pairs = e.pairs[0];
-      const bodyB = pairs.bodyB;
-      if (bodyB.label === 'droneCircle') {
-        drone1.fade(0.5, 0, 50)
-        drone1.pause()
-      }
+      drone1.fade(0.5, 0, 50)
+      drone1.once('fade', drone1.pause)
+      gravityCircle.render.fillStyle = 'black';
     }
 
     const debouncedHandleNoteCollisionStart = debounce(handleNoteCollisionStart, 10, true);
-    const debouncedHandleChordCollisionStart = debounce(handleChordCollisionStart, 1000, true);
+    const debouncedHandleRandomNoteCollisionStart = debounce(handleRandomNoteCollisionStart, 10, true);
+    const debouncedHandleChordCollisionStart = debounce(handleChordCollisionStart, 800, true);
     const debouncedHandleDroneCollisionStart = debounce(handleDroneCollisionStart, 100, true)
-    const debouncedHandleDroneCollisionEnd = debounce(handleDroneCollisionEnd, 400, true);
+
+
     // event listeners
     Events.on(engine, 'collisionStart', (e) => {
       const pairs = e.pairs[0];
       if (pairs.bodyB.label === 'Rectangle Body') {
-        debouncedHandleChordCollisionStart(e)
+        debouncedHandleChordCollisionStart(e);
       } else if (pairs.bodyB.label === 'droneCircle') {
-        debouncedHandleDroneCollisionStart(e)
+        debouncedHandleDroneCollisionStart(e);
+      } else if (pairs.bodyB.label === 'randomCircle') {
+        debouncedHandleRandomNoteCollisionStart(e);
       } else {
-        debouncedHandleNoteCollisionStart(e)
+        debouncedHandleNoteCollisionStart(e);
       }
     });
 
-    Events.on(engine, 'collisionEnd', debouncedHandleDroneCollisionEnd)
+    Events.on(engine, 'collisionActive', (e) => {
+      const bodyA = e.pairs[0].bodyA
+      const bodyB = e.pairs[0].bodyB
+      if (bodyA.label === 'gravityCircle' && bodyB.label === 'droneCircle') {
+
+      }
+    })
+    Events.on(engine, 'collisionEnd', (e) => {
+      const bodyB = e.pairs[0].bodyB;
+        if (bodyB.label === 'droneCircle') {
+          handleDroneCollisionEnd(e)
+        }
+    })
 
     Events.on(engine, 'afterUpdate', () => {
       const height = render.options.height;
@@ -252,6 +211,7 @@ export default function MatterMaker() {
       <ButtonContainer>
         <AbsoluteContainer>
           <MainButton onClick={handleNewCircleClick}>new circle</MainButton>
+          <MainButton onClick={handleNewRandomCircleClick}>new random circle</MainButton>
           <MainButton onClick={handleNewGravityCircleClick}>more black holes</MainButton>
           <MainButton onClick ={handleNewChordSquareClick}>Chord</MainButton>
           <MainButton onClick ={handleNewDroneCircleClick}>Drones</MainButton>

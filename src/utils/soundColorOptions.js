@@ -120,3 +120,69 @@ export const soundColorOptionsChord = {
     color: '#254441'
   },
 }
+export const soundColorOptionsOneShot = {
+  1: {
+    sound: 'oneshot1.wav',
+    color: '#D74E09'
+  },
+  2: {
+    sound: 'oneshot2.wav',
+    color: '#6E0E0A'
+  },
+  3: {
+    sound: 'oneshot3.wav',
+    color: '#254441'
+  },
+  4: {
+    sound: 'oneshot4.wav',
+    color: '#C45BAA'
+  },
+  5: {
+    sound: 'oneshot5.wav',
+    color: '#4E6E5D'
+  },
+  6: {
+    sound: 'oneshot6.wav',
+    color: '#6564DB'
+  },
+  7: {
+    sound: 'oneshot7.wav',
+    color: '#101D42'
+  },
+  8: {
+    sound: 'oneshot8.wav',
+    color: '#656839',
+  },
+  9: {
+    sound: 'oneshot9.wav',
+    color: '#731963'
+  },
+  10: {
+    sound: 'oneshot10.wav',
+    color: '#188FA7'
+  },
+  11: {
+    sound: 'oneshot11.wav',
+    color: '#FF7B9C'
+  },
+  12: {
+    sound: 'oneshot12.wav',
+    color: '#57737A'
+  },
+  13: {
+    sound: 'oneshot13.wav',
+    color: '#D81159'
+  },
+  14: {
+    sound: 'oneshot14.wav',
+    color: '#757761',
+  },
+  15: {
+    sound: 'oneshot15.wav',
+    color: '#DE6C83'
+  },
+  16: {
+    sound: 'oneshot16.wav',
+    color: '#0B7A75'
+  },
+}

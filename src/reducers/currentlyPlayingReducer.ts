@@ -15,14 +15,3 @@ export const currentlyPlayingReducer = createReducer(initialState, (builder) => 
       state = state.pop();
     })
 })
-
-// export const currentlyPlayingReducer = (state = [], action) => {
-//   switch (action.type) {
-//     case 'ADD_SOUND':
-//       return [...state, action.payload]
-//     case 'REMOVE_SOUND':
-//       return []
-//     default:
-//       return state;
-//   }
-// }

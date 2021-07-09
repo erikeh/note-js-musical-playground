@@ -3,23 +3,18 @@ import { useDispatch } from 'react-redux';
 import { Howl, Howler } from 'howler';
 import Matter from 'matter-js';
 
-const randomSound = (sound) => {
+export const fixedSound = (sound) => {
   if (sound) {
     const note = new Howl({
       src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
-      volume: 0.5,
-      onend: () => {
-
-      }
+      volume: 0.4,
     })
     note.play();
-
     return note;
   }
-
 }
 
-const randomChord = (sound) => {
+export const randomChord = (sound) => {
   if (sound) {
     const chord = new Howl({
       src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
@@ -29,9 +24,9 @@ const randomChord = (sound) => {
     return chord;
   }
 }
-const Sounds = () => {
 
-  const dispatch = useDispatch();
-
-}
-
+export const drone1 = new Howl({
+  src: [`${process.env.PUBLIC_URL}/audio/pad1.mp3`],
+  volume: 0.5,
+  loop: true,
+})
