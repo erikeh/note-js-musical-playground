@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Howl, Howler } from 'howler';
 import Matter from 'matter-js';
 
-export const fixedSound = (sound) => {
+export const fixedSound = (sound: string): Howl => {
   if (sound) {
     const note = new Howl({
       src: [`${process.env.PUBLIC_URL}/audio/${sound}`],
@@ -14,7 +14,7 @@ export const fixedSound = (sound) => {
   }
 }
 
-export const randomChord = (sound) => {
+export const randomChord = (sound: string) => {
   if (sound) {
     const chord = new Howl({
       src: [`${process.env.PUBLIC_URL}/audio/${sound}`],

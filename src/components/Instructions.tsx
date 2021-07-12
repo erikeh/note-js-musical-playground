@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
-import MatterMaker from './components/MatterMaker';
+import React from 'react';
+import { AnimationControls, motion, useAnimation } from 'framer-motion';
 import styled from 'styled-components';
-import { motion, useAnimation } from 'framer-motion';
-import { useAppDispatch } from './app/hooks';
-
-import './App.css';
-
-const CenteredDiv = styled.div`
-  display: flex;
-  justify-content: center;
-`
 
 const InstructionsContainer = styled(motion.h3)`
   position: absolute;
   top: 100px;
 `
 
+interface InstructionsProp {
+  handleBallAnimationStart: ()=> Promise<void>,
+  handleTriangleAnimationStart: ()=> Promise<void>,
+  handleGravityBallAnimationStart: ()=> Promise<void>,
+  handleDroneHexagonAnimationStart: ()=> Promise<void>,
+  handleOneShotRectangleAnimationStart: ()=> Promise<void>,
+}
 
-
-function App() {
-  const dispatch = useAppDispatch();
+const Instructions = (props: InstructionsProp) => {
+  const {
+    handleBallAnimationStart,
+    handleTriangleAnimationStart,
+    handleGravityBallAnimationStart,
+    handleDroneHexagonAnimationStart,
+    handleOneShotRectangleAnimationStart,
+  } = props;
 
   const ballLine1 = 'Balls are consistent. They like to pick one note and keep playing it'
   const ballLine2 = `throw it away if you don't like what it's playing`
@@ -116,35 +119,8 @@ function App() {
     </motion.span>
   ))
 
-  async function handleBallAnimationStart() {
-    await ballInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
-    await ballInstructionsControl.start('hidden')
-
-  }
-  async function handleTriangleAnimationStart() {
-    await triangleInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
-    await triangleInstructionsControl.start('hidden')
-  }
-  async function handleGravityBallAnimationStart() {
-    await gravityBallInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
-    await gravityBallInstructionsControl.start('hidden')
-  }
-  async function handleDroneHexagonAnimationStart() {
-    await droneHexagonInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
-    await droneHexagonInstructionsControl.start('hidden')
-  }
-  async function handleOneShotRectangleAnimationStart() {
-    await oneShotRectangleInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
-    await oneShotRectangleInstructionsControl.start('hidden')
-  }
-
   return (
-    <CenteredDiv>
+    <>
       <InstructionsContainer
         variants={sentence}
         initial='hidden'
@@ -192,16 +168,8 @@ function App() {
         <br />
         {oneShotRectangleSentence2}
       </InstructionsContainer>
-
-      <MatterMaker
-        handleBallAnimationStart={handleBallAnimationStart}
-        handleTriangleAnimationStart={handleTriangleAnimationStart}
-        handleGravityBallAnimationStart={handleGravityBallAnimationStart}
-        handleDroneHexagonAnimationStart={handleDroneHexagonAnimationStart}
-        handleOneShotRectangleAnimationStart={handleOneShotRectangleAnimationStart}
-      />
-    </CenteredDiv>
-  );
+    </>
+  )
 }
 
-export default App;
+export default Instructions;
