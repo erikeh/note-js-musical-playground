@@ -4,7 +4,7 @@ NoteJS is a gravity-based geometric musical playground, where the collision of v
 
 ## Why did you make this?
 
-This project was created in 2 days as part of Hack Reactor's 2 day 'MVP' challenge. Rather than creating a simplified imitation of an existing app, I wanted to utilize the time to create something that I believed could bring genuine value, as well as a sense of novelty to the myriad of existing "weekend projects" that have been done over and over again. While I will continue to update some small bugs and performance, the "meat" of the application was done within the first 2 days)
+This project was created in 2 days as part of Hack Reactor's 2 day 'MVP' challenge. Rather than creating a simplified imitation of an existing app, I wanted to utilize the time to create something that I believed could bring genuine value, as well as a sense of novelty to the myriad of existing "weekend projects" that have been done over and over again. (While I will continue to update some small bugs and performance, the "meat" of the application was done within the first 2 days)
 
 ## Motivation
 
