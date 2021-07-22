@@ -1,44 +1,35 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+## What is NoteJS?
 
-## Available Scripts
+NoteJS is a gravity-based geometric musical playground, where the collision of various shapes will create different notes and sounds, based on the shape of the collision bodies themselves. No need for a musical background, all the shapes will eventually create a harmonious blend of pleasant tones, and visual flair.
 
-In the project directory, you can run:
+## Why did you make this?
 
-### `npm start`
+This project was created in 2 days as part of Hack Reactor's 2 day 'MVP' challenge. Rather than creating a simplified imitation of an existing app, I wanted to utilize the time to create something that I believed could bring genuine value, as well as a sense of novelty to the myriad of existing "weekend projects" that have been done over and over again. 
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Motivation
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+I was highly inspired by the relationship of logic and sound that is present in [Modular Synths](https://www.noiseengineering.us/blog/what-is-a-modular-synth), particularly that of the [ambient music community](https://www.youtube.com/watch?v=GjYENsrLLf4). 
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> _A quick primer for the uninitiated: Modular synths, unlike traditional music making, is composed of dozens of individual modules that can produce sound, generate control voltage, create logic, or any combination of the above. A user then uses declarative logic to define a set of "guidelines" for the both the timbre and pitch to be sequenced. This can be as simple as saying "all notes should be random", and as complex as implementing multiple levels of nested logic to define the perfect level of "custom randomness"_
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+I wanted to create an abstracted, streamlined UI implementation of how modular music is conceived and created, but simple enough that it would be accessible to anybody with a link. Each shape represents a predefined set of declarative logic that one would commonly use in modular synthesis
+* Circles - Always play the same note at the set interval
+* Triangles - Always randomize the note at the set interval, but make sure that the pitch frequency is defined within the current musical scale
+* Pentagon - Never stop playing the defined note (or notes in this case) as long as the signal/gate is active 
+* Rectangle - Round-robin through a defined set of musical notes or tones, and with each time the note is "struck" there is a higher and higher chance that this note will stop playing
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Then what does the big black-hole in the middle represent? (*Optional ramblings of a modular synth enthusiast*)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+In modular music, whether it be software or hardware, there is a concept of a [gate](https://en.wikipedia.org/wiki/CV/gate#Gate). A **gate** is simply another term for when [control voltage](https://en.wikipedia.org/wiki/CV/gate) (the universal source of control in many hardware synthesizers, and the only option for modular synths, which is essentially AC voltage that is controlled to be anywhere between -10V to +10V) is above a threshold(usually ~8V) to trigger any given logic. The most common use is for a gate to trigger the playing of a **sound** (If you want to get specific, you would actually want to trigger an envelope generator which is technically another CV generator that defines the shape of the volume of the sound, but you get the point)
 
-### `npm run eject`
+The black-hole is an abstracted representation of a **gate**. When a piece of logic (e.g. a triangle) makes contact with the **gate** (the black-hole), the gate triggers the logic associated with the triangle body (play a random note and change color). Gates do not have to be brief, they can be held as long as you want. This particular behavior is demonstrated by the pentagon's embedded logic -- A continuous note will play only as long as the **gate** is active, and will otherwise produce no sound.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Built with
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+* React - Front-end framework
+* MatterJS - Physics library
+* HowlerJS - Audio playback library (all sounds were created by yours truly)
+* Framer-motion - Animation library for tutorial text
+* Express - Back-end framework
