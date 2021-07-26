@@ -50,13 +50,13 @@ function App() {
 
   return (
     <CenteredDiv>
-      {/* <Instructions
+      <Instructions
         handleBallAnimationStart={handleBallAnimationStart}
         handleTriangleAnimationStart={handleTriangleAnimationStart}
         handleGravityBallAnimationStart={handleGravityBallAnimationStart}
         handleDroneHexagonAnimationStart={handleDroneHexagonAnimationStart}
         handleOneShotRectangleAnimationStart={handleOneShotRectangleAnimationStart}
-      /> */}
+      />
 
       <MatterMaker
         handleBallAnimationStart={handleBallAnimationStart}
