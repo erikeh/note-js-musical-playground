@@ -59,7 +59,7 @@ export function createChordRectangle(
   height = 60
 ) {
   const option = selectNextOption(soundColorOptionsOneShot);
-  const square: UsefulBody = Matter.Bodies.rectangle(x, y, width, height, {
+  const rectangle: UsefulBody = Matter.Bodies.rectangle(x, y, width, height, {
     restitution: 2.5,
     collisionFilter: {
       group: -1,
@@ -68,12 +68,12 @@ export function createChordRectangle(
       fillStyle: option.color,
     },
   });
-  square.sound = option.sound;
-  square.nextChord = function () {
+  rectangle.sound = option.sound;
+  rectangle.nextChord = function () {
     const nextOption = selectNextOption(soundColorOptionsOneShot);
     return nextOption;
   };
-  return square;
+  return rectangle;
 }
 
 export function createCircle(
@@ -131,7 +131,7 @@ export function createDroneHexagon(
   radius = Math.random() * 20 + 40
 ) {
   const option = selectRandomOption(soundColorOptionsDrone);
-  const circle: UsefulBody = Matter.Bodies.polygon(
+  const hexagon: UsefulBody = Matter.Bodies.polygon(
     x,
     y,
     6,
@@ -147,8 +147,8 @@ export function createDroneHexagon(
       },
     }
   );
-  circle.sound = option.sound;
-  return circle;
+  hexagon.sound = option.sound;
+  return hexagon;
 }
 
 export function createGravityCircle(

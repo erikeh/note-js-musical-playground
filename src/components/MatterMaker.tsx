@@ -97,7 +97,7 @@ export default function MatterMaker() {
     });
 
     const gravityCircle = createGravityCircle(
-      render.options.width / 2,
+      render?.options?.width / 2,
       render.options.height / 2
     );
 
