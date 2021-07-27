@@ -4,7 +4,7 @@ import Controls from './Controls';
 import { fixedSound, randomChord, drone1 } from './sounds';
 import { debounce } from 'debounce';
 import Matter, { Body, Engine, IEventCollision } from 'matter-js';
-import { bgColorGen } from '../utils/colorGen';
+import { backgroundColorGen } from '../utils/colorGen';
 import {
   createCircle,
   createRandomTriangle,
@@ -123,7 +123,7 @@ export default function MatterMaker() {
       const nextChordOption = collidedSquare.nextChord();
       collidedSquare.render.fillStyle = nextChordOption.color;
       collidedSquare.sound = nextChordOption.sound;
-      render.options.background = `#${bgColorGen()}`;
+      render.options.background = `#${backgroundColorGen()}`;
     };
     const handleHexagonCollisionStart = (e: IEventCollision<Engine>) => {
       drone1.play();
