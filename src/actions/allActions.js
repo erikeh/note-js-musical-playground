@@ -3,7 +3,7 @@ import {
   playedBallInstructions,
   playedTriangleInstructions,
   playedGravityCircleInstructions,
-  playedOneShotInstructions,
+  playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
 } from '../reducers/hasAnimatedReducer';
 
@@ -13,7 +13,7 @@ const allActions = {
   playedBallInstructions,
   playedTriangleInstructions,
   playedGravityCircleInstructions,
-  playedOneShotInstructions,
+  playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
 }
 

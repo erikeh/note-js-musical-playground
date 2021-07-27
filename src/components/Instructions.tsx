@@ -1,5 +1,6 @@
-import React from 'react';
-import { AnimationControls, motion, useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
+import { useAppSelector } from '../app/hooks';
+import { motion, useAnimation } from 'framer-motion';
 import styled from 'styled-components';
 
 const InstructionsContainer = styled(motion.h3)`
@@ -7,23 +8,16 @@ const InstructionsContainer = styled(motion.h3)`
   top: 100px;
 `
 
-interface InstructionsProp {
-  handleBallAnimationStart: ()=> Promise<void>,
-  handleTriangleAnimationStart: ()=> Promise<void>,
-  handleGravityBallAnimationStart: ()=> Promise<void>,
-  handleDroneHexagonAnimationStart: ()=> Promise<void>,
-  handleOneShotRectangleAnimationStart: ()=> Promise<void>,
-}
+interface InstructionsProp {}
 
 const Instructions = (props: InstructionsProp) => {
-  const {
-    handleBallAnimationStart,
-    handleTriangleAnimationStart,
-    handleGravityBallAnimationStart,
-    handleDroneHexagonAnimationStart,
-    handleOneShotRectangleAnimationStart,
-  } = props;
+  const ballControlsClicked = useAppSelector((state) => state.playedInstructions.playedBallInstructions)
+  const triangleControlsClicked = useAppSelector((state) => state.playedInstructions.playedTriangleInstructions)
+  const gravityCircleControlsClicked = useAppSelector((state) => state.playedInstructions.playedGravityCircleInstructions)
+  const droneHexagonControlsClicked = useAppSelector((state) => state.playedInstructions.playedDroneHexagonInstructions)
+  const oneShotRectangleControlsclicked = useAppSelector((state) => state.playedInstructions.playedOneShotRectangleInstructions)
 
+  // instructions and its animation controls
   const ballLine1 = 'Balls are consistent. They like to pick one note and keep playing it'
   const ballLine2 = `throw it away if you don't like what it's playing`
   const ballInstructionsControl = useAnimation();
@@ -42,6 +36,68 @@ const Instructions = (props: InstructionsProp) => {
   const oneShotRectangleLine1 = `The rectangle likes flashy entrances`;
   const oneShotRectangleLine2 = `enjoy what the rectangle has prepared for you`;
   const oneShotRectangleInstructionsControl = useAnimation();
+
+  // handlers
+  async function handleBallAnimationStart() {
+    await ballInstructionsControl.start('visible')
+    await new Promise(r => setTimeout(r, 2000))
+    await ballInstructionsControl.start('hidden')
+  }
+  async function handleTriangleAnimationStart() {
+    await triangleInstructionsControl.start('visible')
+    await new Promise(r => setTimeout(r, 2000))
+    await triangleInstructionsControl.start('hidden')
+  }
+  async function handleGravityCircleAnimationStart() {
+    await gravityBallInstructionsControl.start('visible')
+    await new Promise(r => setTimeout(r, 2000))
+    await gravityBallInstructionsControl.start('hidden')
+  }
+  async function handleDroneHexagonAnimationStart() {
+    await droneHexagonInstructionsControl.start('visible')
+    await new Promise(r => setTimeout(r, 2000))
+    await droneHexagonInstructionsControl.start('hidden')
+  }
+  async function handleOneShotRectangleAnimationStart() {
+    await oneShotRectangleInstructionsControl.start('visible')
+    await new Promise(r => setTimeout(r, 2000))
+    await oneShotRectangleInstructionsControl.start('hidden')
+  }
+
+  /** states break matterJS if used on MatterMaker.tsx.
+   * Current workaround for handling clicks from MatterMaker to other components
+   * is using redux and "listening" to change in states via useEffect */
+
+  useEffect(() => {
+    if (ballControlsClicked) {
+      handleBallAnimationStart();
+    }
+  }, [ballControlsClicked])
+
+  useEffect(() => {
+    if (triangleControlsClicked) {
+      handleTriangleAnimationStart();
+    }
+  }, [triangleControlsClicked])
+
+  useEffect(() => {
+    if (gravityCircleControlsClicked) {
+      handleGravityCircleAnimationStart();
+    }
+  }, [gravityCircleControlsClicked])
+
+  useEffect(() => {
+    if (droneHexagonControlsClicked) {
+      handleDroneHexagonAnimationStart();
+    }
+  }, [droneHexagonControlsClicked])
+
+  useEffect(() => {
+    if (oneShotRectangleControlsclicked) {
+      handleOneShotRectangleAnimationStart();
+    }
+  }, [oneShotRectangleControlsclicked])
+
 
   // variants
   const sentence = {

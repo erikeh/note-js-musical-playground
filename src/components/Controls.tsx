@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
-interface IconsProps {
+interface ControlsProps {
   handleNewCircleClick: () => void,
   handleNewRandomTriangleClick: () => void,
   handleNewDroneHexagonClick: () => void,
@@ -33,7 +33,7 @@ const IconButton = styled.button`
   }
 `
 
-export default function Icons(props: IconsProps) {
+export default function Controls(props: ControlsProps) {
   const {
     handleNewCircleClick,
     handleNewRandomTriangleClick,

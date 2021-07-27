@@ -50,7 +50,7 @@ function selectNextOption(option) {
 }
 
 // create bodies
-export function createChordSquare(
+export function createChordRectangle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
   width = 40,
@@ -123,7 +123,7 @@ export function createRandomTriangle(
   return triangle;
 }
 
-export function createDroneCircle(
+export function createDroneHexagon(
   x = window.innerWidth * 0.2,
   y = window.innerHeight * 0.2,
   radius = Math.random() * 20 + 40

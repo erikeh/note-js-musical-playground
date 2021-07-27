@@ -1,61 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Instructions from './Instructions';
-import Icons from './Icons';
+import Controls from './Controls';
 import { fixedSound, randomChord, drone1 } from './sounds';
 import { debounce } from 'debounce';
-import Matter, { Body } from 'matter-js';
+import Matter, { Body, World } from 'matter-js';
 import { bgColorGen } from '../utils/colorGen';
-import { createCircle, createRandomTriangle, createDroneCircle, createChordSquare, createGravityCircle } from '../utils/bodies';
+import { createCircle, createRandomTriangle, createDroneHexagon, createChordRectangle, createGravityCircle } from '../utils/bodies';
 import styled from 'styled-components';
 import { Button, Icon } from 'bulma-styled-components';
+import allActions from '../actions/allActions';
 import { motion } from 'framer-motion'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 Matter.use('matter-attractors');
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`
-const AbsoluteContainer = styled.div`
-  position: absolute;
-`
-const MainButton = styled(Button)`
-  height: 30px;
-  border-radius: 2px;
-  &:focus {
-    outline: none;
-    box-shadow: none;
-  }
-`
-
-const IconButton = styled.button`
-  background: none;
-	/* color: inherit; */
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
-  font-size: 25px;
-  padding: 15px 25px 0 25px;
-  &:hover {
-    cursor: pointer;
-  }
-  `
-
-
-export default function MatterMaker(props) {
+export default function MatterMaker() {
   const {
-    handleBallAnimationStart,
-    handleTriangleAnimationStart,
-    handleGravityBallAnimationStart,
-    handleDroneHexagonAnimationStart,
-    handleOneShotRectangleAnimationStart,
-  } = props
-  const canvasRef = useRef(null);
+    playedBallInstructions,
+    playedTriangleInstructions,
+    playedGravityCircleInstructions,
+    playedOneShotRectangleInstructions,
+    playedDroneHexagonInstructions
+  } = allActions;
 
-  let ballInstructionsPlaying = false;
+  const dispatch = useAppDispatch();
+  const canvasRef = useRef(null);
 
   // Matter aliases
   const Engine = Matter.Engine,
@@ -69,41 +39,20 @@ export default function MatterMaker(props) {
   // create an engine
   const engine = Engine.create();
 
-  // creating "states" as using react/redux states break matter JS
-  let playedBall = false;
-  let playedTriangle = false;
-  let playedGravityBall = false;
-  let playedOneShot = false;
-  let playedDrone = false;
-
-
   // event handlers
   function handleNewCircleClick(): void {
-    if (!playedBall) {
-      handleBallAnimationStart();
-      playedBall = true;
-      ballInstructionsPlaying = true;
-      setTimeout(() => ballInstructionsPlaying = false, 3000)
-    }
-    Composite.add(engine.world, createCircle())
+    dispatch(playedBallInstructions());
+    Composite.add(engine.world, createCircle());
   }
 
   function handleNewRandomTriangleClick() {
-    if (!playedTriangle) {
-      handleTriangleAnimationStart();
-      playedTriangle = true;
-    }
-    Composite.add(engine.world, createRandomTriangle())
+    dispatch(playedTriangleInstructions);
+    Composite.add(engine.world, createRandomTriangle());
   }
 
   function handleNewDroneHexagonClick() {
-    if (!playedDrone) {
-      handleDroneHexagonAnimationStart();
-      playedDrone = true;
-    }
-
-    Composite.add(engine.world, createDroneCircle())
-
+    dispatch(playedGravityCircleInstructions);
+    Composite.add(engine.world, createDroneHexagon());
   }
 
   function handleNewGravityCircleClick() {
@@ -119,7 +68,7 @@ export default function MatterMaker(props) {
       handleOneShotRectangleAnimationStart();
       playedOneShot = true;
     }
-    Composite.add(engine.world, createChordSquare())
+    Composite.add(engine.world, createChordRectangle())
   }
 
   function handleDeleteAllBodiesClick() {
@@ -137,29 +86,29 @@ export default function MatterMaker(props) {
   }
 
   useEffect(() => {
-  console.log('innerwidth', window.innerWidth)
-  // create a renderer
-  const render = Render.create({
-    element: canvasRef.current || document.body,
-    engine: engine,
-    options: {
-      wireframes: false,
-      background: `white`,
-      height: window.innerHeight,
-      width: window.innerWidth,
-    },
-  });
+    console.log('innerwidth', window.innerWidth)
+    // create a renderer
+    const render = Render.create({
+      element: canvasRef.current || document.body,
+      engine: engine,
+      options: {
+        wireframes: false,
+        background: `white`,
+        height: window.innerHeight,
+        width: window.innerWidth,
+      },
+    });
 
-  const gravityCircle = createGravityCircle(render.options.width / 2, render.options.height / 2)
+    const gravityCircle = createGravityCircle(render.options.width / 2, render.options.height / 2)
 
-  // collision handlers
-  const handleNoteCollisionStart = (e) => {
-    const bodyB = e.pairs[0].bodyB;
-    fixedSound(bodyB.sound);
-  }
-  const handleRandomNoteCollisionStart = (e) => {
-    const collidedTriangle = e.pairs[0].bodyB;
-    fixedSound(collidedTriangle.sound);
+    // collision handlers
+    const handleNoteCollisionStart = (e) => {
+      const bodyB = e.pairs[0].bodyB;
+      fixedSound(bodyB.sound);
+    }
+    const handleRandomNoteCollisionStart = (e) => {
+      const collidedTriangle = e.pairs[0].bodyB;
+      fixedSound(collidedTriangle.sound);
 
     const nextNoteOption = collidedTriangle.nextRandomNote();
       collidedTriangle.render.fillStyle = nextNoteOption.color;
@@ -279,11 +228,20 @@ export default function MatterMaker(props) {
     const runner = Runner.create();
     // run the engine
     Runner.run(runner, engine);
+    return () => {
+      Render.stop(render);
+      Composite.clear(engine.world, false);
+      Engine.clear(engine);
+      render.canvas.remove();
+      render.canvas = null;
+      render.context = null;
+      render.textures = {};
+    }
   }, [])
 
   return (
     <div ref={canvasRef}>
-      <Icons
+      <Controls
         handleNewCircleClick={handleNewCircleClick}
         handleNewRandomTriangleClick={handleNewRandomTriangleClick}
         handleNewDroneHexagonClick={handleNewDroneHexagonClick}
@@ -291,13 +249,7 @@ export default function MatterMaker(props) {
         handleNewOneShotRectangleClick={handleNewOneShotRectangleClick}
         handleDeleteAllBodiesClick={handleDeleteAllBodiesClick}
       />
-      <Instructions
-        handleBallAnimationStart={handleBallAnimationStart}
-        handleTriangleAnimationStart={handleTriangleAnimationStart}
-        handleGravityBallAnimationStart={handleGravityBallAnimationStart}
-        handleDroneHexagonAnimationStart={handleDroneHexagonAnimationStart}
-        handleOneShotRectangleAnimationStart={handleOneShotRectangleAnimationStart}
-      />
+
     </div>
   )
 }
