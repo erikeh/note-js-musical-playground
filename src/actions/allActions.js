@@ -5,6 +5,9 @@ import {
   playedGravityCircleInstructions,
   playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
+  playingBallInstructions,
+  playingTriangleInstructions,
+  playingGravityCircleInstructions,
 } from '../reducers/hasAnimatedReducer';
 
 const allActions = {
@@ -15,6 +18,9 @@ const allActions = {
   playedGravityCircleInstructions,
   playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
+  playingBallInstructions,
+  playingTriangleInstructions,
+  playingGravityCircleInstructions,
 }
 
-export default allActions
+export default allActions;

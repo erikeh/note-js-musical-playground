@@ -21,11 +21,12 @@ Matter.use('matter-attractors')
 export default function MatterMaker() {
   const {
     playedBallInstructions,
+    playingBallInstructions,
     playedTriangleInstructions,
     playedGravityCircleInstructions,
     playedOneShotRectangleInstructions,
     playedDroneHexagonInstructions,
-  } = allActions
+  } = allActions;
 
   const dispatch = useAppDispatch()
   const canvasRef = useRef(null)
@@ -44,8 +45,8 @@ export default function MatterMaker() {
 
   // event handlers
   function handleNewCircleClick(): void {
-    dispatch(playedBallInstructions())
-    Composite.add(engine.world, createCircle())
+    dispatch(playedBallInstructions());
+    Composite.add(engine.world, createCircle());
   }
 
   function handleNewRandomTriangleClick() {

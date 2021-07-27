@@ -1,77 +1,83 @@
-import { useEffect } from 'react'
-import { useAppSelector } from '../app/hooks'
-import { motion, useAnimation } from 'framer-motion'
-import styled from 'styled-components'
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import { motion, useAnimation } from 'framer-motion';
+import allActions from '../actions/allActions';
+import styled from 'styled-components';
 
 const InstructionsContainer = styled(motion.h3)`
   position: absolute;
   top: 100px;
-`
+`;
 
 interface InstructionsProp {}
 
 const Instructions = (props: InstructionsProp) => {
+  const dispatch = useAppDispatch();
+  const { playingBallInstructions } = allActions;
+
   const ballControlsClicked = useAppSelector(
     (state) => state.playedInstructions.playedBallInstructions
-  )
+  );
   const triangleControlsClicked = useAppSelector(
     (state) => state.playedInstructions.playedTriangleInstructions
-  )
+  );
   const gravityCircleControlsClicked = useAppSelector(
     (state) => state.playedInstructions.playedGravityCircleInstructions
-  )
+  );
   const droneHexagonControlsClicked = useAppSelector(
     (state) => state.playedInstructions.playedDroneHexagonInstructions
-  )
+  );
   const oneShotRectangleControlsclicked = useAppSelector(
     (state) => state.playedInstructions.playedOneShotRectangleInstructions
-  )
+  );
 
   // instructions and its animation controls
-  const ballLine1 = 'Balls are consistent. They like to pick one note and keep playing it'
-  const ballLine2 = `throw it away if you don't like what it's playing`
-  const ballInstructionsControl = useAnimation()
+  const ballLine1 = 'Balls are consistent. They like to pick one note and keep playing it';
+  const ballLine2 = `throw it away if you don't like what it's playing`;
+  const ballInstructionsControl = useAnimation();
 
-  const triangleLine1 = `Triangles are unpredictable...`
-  const triangleLine2 = `even the notes they play are random`
-  const triangleInstructionsControl = useAnimation()
+  const triangleLine1 = `Triangles are unpredictable...`;
+  const triangleLine2 = `even the notes they play are random`;
+  const triangleInstructionsControl = useAnimation();
 
-  const gravityBallLine1 = `Did you know you can move the black ball with your mouse?`
-  const gravityBallInstructionsControl = useAnimation()
+  const gravityBallLine1 = `Did you know you can move the black ball with your mouse?`;
+  const gravityBallInstructionsControl = useAnimation();
 
-  const droneHexagonLine1 = `The hexagon doesn't like craziness..`
-  const droneHexagonLine2 = `it will only play as long as it is touching the black ball`
-  const droneHexagonInstructionsControl = useAnimation()
+  const droneHexagonLine1 = `The hexagon doesn't like craziness..`;
+  const droneHexagonLine2 = `it will only play as long as it is touching the black ball`;
+  const droneHexagonInstructionsControl = useAnimation();
 
-  const oneShotRectangleLine1 = `The rectangle likes flashy entrances`
-  const oneShotRectangleLine2 = `enjoy what the rectangle has prepared for you`
-  const oneShotRectangleInstructionsControl = useAnimation()
+  const oneShotRectangleLine1 = `The rectangle likes flashy entrances`;
+  const oneShotRectangleLine2 = `enjoy what the rectangle has prepared for you`;
+  const oneShotRectangleInstructionsControl = useAnimation();
 
   // handlers
   async function handleBallAnimationStart() {
-    await ballInstructionsControl.start('visible')
-    await new Promise((r) => setTimeout(r, 2000))
-    await ballInstructionsControl.start('hidden')
+    dispatch(playingBallInstructions(true));
+    await ballInstructionsControl.start('visible');
+    await new Promise((r) => setTimeout(r, 2000));
+    await ballInstructionsControl.start('hidden');
+    dispatch(playingBallInstructions(false));
   }
   async function handleTriangleAnimationStart() {
-    await triangleInstructionsControl.start('visible')
-    await new Promise((r) => setTimeout(r, 2000))
-    await triangleInstructionsControl.start('hidden')
+    await triangleInstructionsControl.start('visible');
+    await new Promise((r) => setTimeout(r, 2000));
+    await triangleInstructionsControl.start('hidden');
   }
   async function handleGravityCircleAnimationStart() {
-    await gravityBallInstructionsControl.start('visible')
-    await new Promise((r) => setTimeout(r, 2000))
-    await gravityBallInstructionsControl.start('hidden')
+    await gravityBallInstructionsControl.start('visible');
+    await new Promise((r) => setTimeout(r, 2000));
+    await gravityBallInstructionsControl.start('hidden');
   }
   async function handleDroneHexagonAnimationStart() {
-    await droneHexagonInstructionsControl.start('visible')
-    await new Promise((r) => setTimeout(r, 2000))
-    await droneHexagonInstructionsControl.start('hidden')
+    await droneHexagonInstructionsControl.start('visible');
+    await new Promise((r) => setTimeout(r, 2000));
+    await droneHexagonInstructionsControl.start('hidden');
   }
   async function handleOneShotRectangleAnimationStart() {
-    await oneShotRectangleInstructionsControl.start('visible')
-    await new Promise((r) => setTimeout(r, 2000))
-    await oneShotRectangleInstructionsControl.start('hidden')
+    await oneShotRectangleInstructionsControl.start('visible');
+    await new Promise((r) => setTimeout(r, 2000));
+    await oneShotRectangleInstructionsControl.start('hidden');
   }
 
   /** states break matterJS if used on MatterMaker.tsx.
@@ -80,33 +86,33 @@ const Instructions = (props: InstructionsProp) => {
 
   useEffect(() => {
     if (ballControlsClicked) {
-      handleBallAnimationStart()
+      handleBallAnimationStart();
     }
-  }, [ballControlsClicked])
+  }, [ballControlsClicked]);
 
   useEffect(() => {
     if (triangleControlsClicked) {
-      handleTriangleAnimationStart()
+      handleTriangleAnimationStart();
     }
-  }, [triangleControlsClicked])
+  }, [triangleControlsClicked]);
 
   useEffect(() => {
     if (gravityCircleControlsClicked) {
-      handleGravityCircleAnimationStart()
+      handleGravityCircleAnimationStart();
     }
-  }, [gravityCircleControlsClicked])
+  }, [gravityCircleControlsClicked]);
 
   useEffect(() => {
     if (droneHexagonControlsClicked) {
-      handleDroneHexagonAnimationStart()
+      handleDroneHexagonAnimationStart();
     }
-  }, [droneHexagonControlsClicked])
+  }, [droneHexagonControlsClicked]);
 
   useEffect(() => {
     if (oneShotRectangleControlsclicked) {
-      handleOneShotRectangleAnimationStart()
+      handleOneShotRectangleAnimationStart();
     }
-  }, [oneShotRectangleControlsclicked])
+  }, [oneShotRectangleControlsclicked]);
 
   // variants
   const sentence = {
@@ -124,65 +130,65 @@ const Instructions = (props: InstructionsProp) => {
         staggerChildren: 0.05,
       },
     },
-  }
+  };
   const letter = {
     hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
       y: 0,
     },
-  }
+  };
 
   // create sentence animation components
   const ballSentence1 = ballLine1.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
   const ballSentence2 = ballLine2.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
 
   const triangleSentence1 = triangleLine1.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
   const triangleSentence2 = triangleLine2.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
 
   const gravityBallSentence1 = gravityBallLine1.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
 
   const droneHexagonSentence1 = droneHexagonLine1.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
   const droneHexagonSentence2 = droneHexagonLine2.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
 
   const oneShotRectangleSentence1 = oneShotRectangleLine1.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
   const oneShotRectangleSentence2 = oneShotRectangleLine2.split('').map((char, idx) => (
     <motion.span key={char + '-' + idx} variants={letter}>
       {char}
     </motion.span>
-  ))
+  ));
 
   return (
     <>
@@ -230,7 +236,7 @@ const Instructions = (props: InstructionsProp) => {
         {oneShotRectangleSentence2}
       </InstructionsContainer>
     </>
-  )
-}
+  );
+};
 
-export default Instructions
+export default Instructions;

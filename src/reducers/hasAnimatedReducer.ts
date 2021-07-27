@@ -1,4 +1,4 @@
-import { createReducer, createAction, ActionCreator } from '@reduxjs/toolkit';
+import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../app/store';
 
 export const playedBallInstructions = createAction('PLAYED_BALL_INSTRUCTIONS');
@@ -7,20 +7,39 @@ export const playedGravityCircleInstructions = createAction('PLAYED_GRAVITY_CIRC
 export const playedOneShotRectangleInstructions = createAction('PLAYED_ONE_SHOT_INSTRUCTIONS');
 export const playedDroneHexagonInstructions = createAction('PLAYED_DRONE_HEXAGON_INSTRUCTIONS');
 
+export const playingBallInstructions = createAction<boolean>('PLAYING_BALL_INSTRUCTIONS');
+export const playingTriangleInstructions = createAction<boolean>('PLAYING_TRIANGLE_INSTRUCTIONS');
+export const playingGravityCircleInstructions = createAction<boolean>(
+  'PLAYING_GRAVITY_CIRCLE_INSTRUCTIONS'
+);
+// export const playingBallInstructions = createAsyncThunk('ball/instructions', async (boolean) => {
+//   return boolean;
+// });
+
 interface HasAnimatedState {
   playedBallInstructions: boolean;
+  playingBallInstructions: boolean;
   playedTriangleInstructions: boolean;
+  playingTriangleInstructions: boolean;
   playedGravityCircleInstructions: boolean;
+  playingGravityCircleInstructions: boolean;
   playedOneShotRectangleInstructions: boolean;
+  playingOneShotRectangleInstructions: boolean;
   playedDroneHexagonInstructions: boolean;
+  playingDroneHexagonInstructions: boolean;
 }
 
 const initialState: HasAnimatedState = {
   playedBallInstructions: false,
+  playingBallInstructions: false,
   playedTriangleInstructions: false,
+  playingTriangleInstructions: false,
   playedGravityCircleInstructions: false,
+  playingGravityCircleInstructions: false,
   playedOneShotRectangleInstructions: false,
+  playingOneShotRectangleInstructions: false,
   playedDroneHexagonInstructions: false,
+  playingDroneHexagonInstructions: false,
 };
 
 export const playedInstructionsReducer = createReducer(initialState, (builder) => {
@@ -40,4 +59,8 @@ export const playedInstructionsReducer = createReducer(initialState, (builder) =
     .addCase(playedDroneHexagonInstructions, (state = initialState, action) => {
       state.playedDroneHexagonInstructions = true;
     })
-})
+    .addCase(playingBallInstructions, (state = initialState, action) => {
+      state.playingBallInstructions = action.payload;
+    })
+    .addDefaultCase((state, action) => {});
+});
