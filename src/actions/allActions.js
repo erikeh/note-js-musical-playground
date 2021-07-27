@@ -7,7 +7,9 @@ import {
   playingBallInstructions,
   playingTriangleInstructions,
   playingGravityCircleInstructions,
-} from '../reducers/hasAnimatedReducer';
+  playingOneShotRectangleInstructions,
+  playingDroneHexagonInstructions,
+} from '../reducers/animationStatusReducer';
 
 const allActions = {
   playedBallInstructions,
@@ -18,6 +20,8 @@ const allActions = {
   playingBallInstructions,
   playingTriangleInstructions,
   playingGravityCircleInstructions,
+  playingOneShotRectangleInstructions,
+  playingDroneHexagonInstructions,
 };
 
 export default allActions;

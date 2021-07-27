@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { motion, useAnimation } from 'framer-motion';
 import allActions from '../actions/allActions';
@@ -13,22 +13,28 @@ interface InstructionsProp {}
 
 const Instructions = (props: InstructionsProp) => {
   const dispatch = useAppDispatch();
-  const { playingBallInstructions } = allActions;
+  const {
+    playingBallInstructions,
+    playingTriangleInstructions,
+    playingGravityCircleInstructions,
+    playingOneShotRectangleInstructions,
+    playingDroneHexagonInstructions,
+  } = allActions;
 
   const ballControlsClicked = useAppSelector(
-    (state) => state.playedInstructions.playedBallInstructions
+    (state) => state.animationStatus.playedBallInstructions
   );
   const triangleControlsClicked = useAppSelector(
-    (state) => state.playedInstructions.playedTriangleInstructions
+    (state) => state.animationStatus.playedTriangleInstructions
   );
   const gravityCircleControlsClicked = useAppSelector(
-    (state) => state.playedInstructions.playedGravityCircleInstructions
+    (state) => state.animationStatus.playedGravityCircleInstructions
   );
   const droneHexagonControlsClicked = useAppSelector(
-    (state) => state.playedInstructions.playedDroneHexagonInstructions
+    (state) => state.animationStatus.playedDroneHexagonInstructions
   );
   const oneShotRectangleControlsclicked = useAppSelector(
-    (state) => state.playedInstructions.playedOneShotRectangleInstructions
+    (state) => state.animationStatus.playedOneShotRectangleInstructions
   );
 
   // instructions and its animation controls
@@ -53,33 +59,50 @@ const Instructions = (props: InstructionsProp) => {
   const oneShotRectangleInstructionsControl = useAnimation();
 
   // handlers
-  async function handleBallAnimationStart() {
+
+  const handleBallAnimationStart = useCallback(async () => {
     dispatch(playingBallInstructions(true));
     await ballInstructionsControl.start('visible');
     await new Promise((r) => setTimeout(r, 2000));
     await ballInstructionsControl.start('hidden');
     dispatch(playingBallInstructions(false));
-  }
-  async function handleTriangleAnimationStart() {
+  }, [dispatch, ballInstructionsControl, playingBallInstructions]);
+
+  const handleTriangleAnimationStart = useCallback(async () => {
+    dispatch(playingTriangleInstructions(true));
     await triangleInstructionsControl.start('visible');
     await new Promise((r) => setTimeout(r, 2000));
     await triangleInstructionsControl.start('hidden');
-  }
-  async function handleGravityCircleAnimationStart() {
+    dispatch(playingTriangleInstructions(false));
+  }, [dispatch, playingTriangleInstructions, triangleInstructionsControl]);
+
+  const handleGravityCircleAnimationStart = useCallback(async () => {
+    dispatch(playingGravityCircleInstructions(true));
     await gravityBallInstructionsControl.start('visible');
     await new Promise((r) => setTimeout(r, 2000));
     await gravityBallInstructionsControl.start('hidden');
-  }
-  async function handleDroneHexagonAnimationStart() {
+    dispatch(playingGravityCircleInstructions(false));
+  }, [dispatch, gravityBallInstructionsControl, playingGravityCircleInstructions]);
+
+  const handleDroneHexagonAnimationStart = useCallback(async () => {
+    dispatch(playingDroneHexagonInstructions(true));
     await droneHexagonInstructionsControl.start('visible');
     await new Promise((r) => setTimeout(r, 2000));
     await droneHexagonInstructionsControl.start('hidden');
-  }
-  async function handleOneShotRectangleAnimationStart() {
+    dispatch(playingDroneHexagonInstructions(false));
+  }, [dispatch, droneHexagonInstructionsControl, playingDroneHexagonInstructions]);
+
+  const handleOneShotRectangleAnimationStart = useCallback(async () => {
+    dispatch(playingOneShotRectangleInstructions(true));
     await oneShotRectangleInstructionsControl.start('visible');
     await new Promise((r) => setTimeout(r, 2000));
     await oneShotRectangleInstructionsControl.start('hidden');
-  }
+    dispatch(playingOneShotRectangleInstructions(false));
+  }, [
+    dispatch,
+    oneShotRectangleInstructionsControl,
+    playingOneShotRectangleInstructions,
+  ]);
 
   /** states break matterJS if used on MatterMaker.tsx.
    * Current workaround for handling clicks from MatterMaker to other components
@@ -89,7 +112,7 @@ const Instructions = (props: InstructionsProp) => {
     if (ballControlsClicked) {
       handleBallAnimationStart();
     }
-  }, [ballControlsClicked]);
+  }, [ballControlsClicked, handleBallAnimationStart]);
 
   useEffect(() => {
     if (triangleControlsClicked) {

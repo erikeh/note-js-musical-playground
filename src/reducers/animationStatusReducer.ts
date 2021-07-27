@@ -20,9 +20,12 @@ export const playingTriangleInstructions = createAction<boolean>(
 export const playingGravityCircleInstructions = createAction<boolean>(
   'PLAYING_GRAVITY_CIRCLE_INSTRUCTIONS'
 );
-// export const playingBallInstructions = createAsyncThunk('ball/instructions', async (boolean) => {
-//   return boolean;
-// });
+export const playingOneShotRectangleInstructions = createAction<boolean>(
+  'PLAYING_ONE_SHOT_RECTANGLE_INSTRUCTIONS'
+);
+export const playingDroneHexagonInstructions = createAction<boolean>(
+  'PLAYING_DRONE_HEXAGON_INSTRUCTIONS'
+);
 
 interface HasAnimatedState {
   playedBallInstructions: boolean;
@@ -50,7 +53,7 @@ const initialState: HasAnimatedState = {
   playingDroneHexagonInstructions: false,
 };
 
-export const playedInstructionsReducer = createReducer(initialState, (builder) => {
+export const animationStatusReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(playedBallInstructions, (state = initialState, action) => {
       state.playedBallInstructions = true;

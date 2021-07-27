@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import { playedInstructionsReducer } from './hasAnimatedReducer';
+import { animationStatusReducer } from './animationStatusReducer';
 
 const rootReducer = combineReducers({
-  playedInstructions: playedInstructionsReducer,
+  animationStatus: animationStatusReducer,
 });
 
 export default rootReducer;
