@@ -1,4 +1,13 @@
-export const soundColorOptions = {
+export interface SoundColorOption {
+  sound: string;
+  color: string;
+}
+
+export interface SoundColorOptions {
+  [key: string]: SoundColorOption;
+}
+
+export const soundColorOptions: SoundColorOptions = {
   1: {
     sound: 'notes1',
     color: '#EB9486',
@@ -24,7 +33,7 @@ export const soundColorOptions = {
     color: '#80A1C1',
   },
 };
-export const soundColorOptionsPluck = {
+export const soundColorOptionsPluck: SoundColorOptions = {
   1: {
     sound: 'pluck_1.mp3',
     color: '#EB9486',

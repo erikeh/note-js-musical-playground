@@ -25,7 +25,6 @@ const grabRandomUniqueIndex = () => {
 export function bgColorGen() {
   let randomIndex = grabRandomUniqueIndex();
   const randomColor = colors[randomIndex];
-
   return randomColor;
 }
 

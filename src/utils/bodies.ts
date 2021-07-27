@@ -5,23 +5,24 @@ import {
   soundColorOptionsDrone,
   soundColorOptionsPluck,
   soundColorOptionsOneShot,
+  SoundColorOptions,
 } from './soundColorOptions';
 
 Matter.use(MatterAttractors);
 
-export interface UsefulBody extends Matter.Body {
-  sound: string;
+export interface SoundBody extends Matter.Body {
+  sound?: string;
   nextChord?: Function;
   nextRandomNote?: Function;
 }
 
 // helper functions
-function selectRandomOption(option) {
-  const optionKeys = Object.keys(option);
+function selectRandomOption(options: SoundColorOptions) {
+  const optionKeys = Object.keys(options);
   const randomIndex = Math.floor(
     Matter.Common.random(1, Number(optionKeys[optionKeys.length - 1]) + 1)
   );
-  return option[randomIndex];
+  return options[randomIndex];
 }
 
 // useful data store
@@ -33,18 +34,15 @@ function randomAngle() {
   return angle;
 }
 
-function selectNextOption(option) {
-  const optionKeys = Object.keys(option);
+function selectNextOption(options: SoundColorOptions) {
+  const optionKeys = Object.keys(options);
   function nextIndex() {
     if (!keyMemo || keyMemo + 1 > optionKeys.length) {
       keyMemo = Number(optionKeys[0]);
-      return option[keyMemo];
-    } else if (keyMemo + 1 <= optionKeys.length) {
-      keyMemo++;
-      return option[keyMemo];
+      return options[keyMemo];
     } else {
-      console.log('error, selectNextOption function isnt working');
-      return;
+      keyMemo++;
+      return options[keyMemo];
     }
   }
   const nextChordOption = nextIndex();
@@ -57,9 +55,9 @@ export function createChordRectangle(
   y = Math.random() * (window.innerHeight * 0.8),
   width = 40,
   height = 60
-) {
+): SoundBody {
   const option = selectNextOption(soundColorOptionsOneShot);
-  const rectangle: UsefulBody = Matter.Bodies.rectangle(x, y, width, height, {
+  const rectangle: SoundBody = Matter.Bodies.rectangle(x, y, width, height, {
     restitution: 2.5,
     collisionFilter: {
       group: -1,
@@ -80,9 +78,9 @@ export function createCircle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
   radius = Math.random() * 30 + 10
-) {
+): SoundBody {
   const option = selectRandomOption(soundColorOptionsPluck);
-  const circle: UsefulBody = Matter.Bodies.circle(x, y, radius, {
+  const circle: SoundBody = Matter.Bodies.circle(x, y, radius, {
     restitution: 1.02,
     frictionAir: 0,
     friction: 0,
@@ -102,9 +100,9 @@ export function createRandomTriangle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
   radius = Math.random() * 30 + 20
-) {
+): SoundBody {
   const option = selectRandomOption(soundColorOptionsPluck);
-  const triangle: UsefulBody = Matter.Bodies.polygon(x, y, 3, radius, {
+  const triangle: SoundBody = Matter.Bodies.polygon(x, y, 3, radius, {
     restitution: 1.1,
     frictionAir: 0,
     friction: 0,
@@ -131,7 +129,7 @@ export function createDroneHexagon(
   radius = Math.random() * 20 + 40
 ) {
   const option = selectRandomOption(soundColorOptionsDrone);
-  const hexagon: UsefulBody = Matter.Bodies.polygon(
+  const hexagon: SoundBody = Matter.Bodies.polygon(
     x,
     y,
     6,
@@ -167,7 +165,7 @@ export function createGravityCircle(
     },
     plugin: {
       attractors: [
-        function (bodyA, bodyB) {
+        function (bodyA: Matter.Body, bodyB: Matter.Body) {
           return {
             x: (bodyA.position.x - bodyB.position.x) * 4e-6,
             y: (bodyA.position.y - bodyB.position.y) * 4e-6,

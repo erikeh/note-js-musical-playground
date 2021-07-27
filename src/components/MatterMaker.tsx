@@ -11,7 +11,7 @@ import {
   createDroneHexagon,
   createChordRectangle,
   createGravityCircle,
-  UsefulBody,
+  SoundBody,
 } from '../utils/bodies';
 import allActions from '../actions/allActions';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -76,11 +76,11 @@ export default function MatterMaker() {
       }
     });
   }
-  function handleGravityOn() {
-    engine.gravity.y = 1;
-    engine.gravity.scale = 0.001;
-    console.log(engine.gravity);
-  }
+  // function handleGravityOn() {
+  //   engine.gravity.y = 1;
+  //   engine.gravity.scale = 0.001;
+  //   console.log(engine.gravity);
+  // }
 
   useEffect(() => {
     console.log('innerwidth', window.innerWidth);
@@ -97,25 +97,25 @@ export default function MatterMaker() {
     });
 
     const gravityCircle = createGravityCircle(
-      render?.options?.width / 2,
-      render.options.height / 2
+      render.options.width! / 2,
+      render.options.height! / 2
     );
 
     // collision handlers
-    const handleNoteCollisionStart = (e: IEventCollision<Engine>) => {
-      const bodyB = e.pairs[0].bodyB;
-      fixedSound((bodyB as UsefulBody).sound);
+    const handleCircleCollisionStart = (e: IEventCollision<Engine>) => {
+      const bodyB = e.pairs[0].bodyB as SoundBody;
+      fixedSound(bodyB.sound);
     };
-    const handleRandomNoteCollisionStart = (e: IEventCollision<Engine>) => {
-      const collidedTriangle = e.pairs[0].bodyB;
+    const handleTriangleCollisionStart = (e: IEventCollision<Engine>) => {
+      const collidedTriangle = e.pairs[0].bodyB as SoundBody;
       fixedSound(collidedTriangle.sound);
 
       const nextNoteOption = collidedTriangle.nextRandomNote();
       collidedTriangle.render.fillStyle = nextNoteOption.color;
-      collidedTriangle.sound = nextNoteOption.sound;
+      (collidedTriangle as SoundBody).sound = nextNoteOption.sound;
     };
-    const handleChordCollisionStart = (e: IEventCollision<Engine>) => {
-      const collidedSquare = e.pairs[0].bodyB;
+    const handleRectangleCollisionStart = (e: IEventCollision<Engine>) => {
+      const collidedSquare = e.pairs[0].bodyB as SoundBody;
       randomChord(collidedSquare.sound);
       // preparing body for next bounce by changing chord & color
       const nextChordOption = collidedSquare.nextChord();
@@ -123,7 +123,7 @@ export default function MatterMaker() {
       collidedSquare.sound = nextChordOption.sound;
       render.options.background = `#${bgColorGen()}`;
     };
-    const handleDroneCollisionStart = (e: IEventCollision<Engine>) => {
+    const handleHexagonCollisionStart = (e: IEventCollision<Engine>) => {
       drone1.play();
       drone1.fade(0, 0.5, 120);
       Composite.allBodies(engine.world).forEach((body) => {
@@ -144,23 +144,23 @@ export default function MatterMaker() {
       // gravityCircle.render.fillStyle = 'black';
     };
 
-    const debouncedHandleNoteCollisionStart = debounce(
-      handleNoteCollisionStart,
+    const debouncedHandleCircleCollisionStart = debounce(
+      handleCircleCollisionStart,
       10,
       true
     );
-    const debouncedHandleRandomNoteCollisionStart = debounce(
-      handleRandomNoteCollisionStart,
+    const debouncedHandleTriangleCollisionStart = debounce(
+      handleTriangleCollisionStart,
       10,
       true
     );
-    const debouncedHandleChordCollisionStart = debounce(
-      handleChordCollisionStart,
+    const debouncedHandleRectangleCollisionStart = debounce(
+      handleRectangleCollisionStart,
       800,
       true
     );
-    const debouncedHandleDroneCollisionStart = debounce(
-      handleDroneCollisionStart,
+    const debouncedHandleHexagonCollisionStart = debounce(
+      handleHexagonCollisionStart,
       100,
       true
     );
@@ -169,13 +169,13 @@ export default function MatterMaker() {
     Events.on(engine, 'collisionStart', (e) => {
       const pairs = e.pairs[0];
       if (pairs.bodyB.label === 'Rectangle Body') {
-        debouncedHandleChordCollisionStart(e);
+        debouncedHandleRectangleCollisionStart(e);
       } else if (pairs.bodyB.label === 'droneCircle') {
-        debouncedHandleDroneCollisionStart(e);
+        debouncedHandleHexagonCollisionStart(e);
       } else if (pairs.bodyB.label === 'randomCircle') {
-        debouncedHandleRandomNoteCollisionStart(e);
+        debouncedHandleTriangleCollisionStart(e);
       } else {
-        debouncedHandleNoteCollisionStart(e);
+        debouncedHandleCircleCollisionStart(e);
       }
     });
 
