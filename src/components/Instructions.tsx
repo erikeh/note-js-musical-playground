@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useAppSelector } from '../app/hooks';
-import { motion, useAnimation } from 'framer-motion';
-import styled from 'styled-components';
+import { useEffect } from 'react'
+import { useAppSelector } from '../app/hooks'
+import { motion, useAnimation } from 'framer-motion'
+import styled from 'styled-components'
 
 const InstructionsContainer = styled(motion.h3)`
   position: absolute;
@@ -11,56 +11,66 @@ const InstructionsContainer = styled(motion.h3)`
 interface InstructionsProp {}
 
 const Instructions = (props: InstructionsProp) => {
-  const ballControlsClicked = useAppSelector((state) => state.playedInstructions.playedBallInstructions)
-  const triangleControlsClicked = useAppSelector((state) => state.playedInstructions.playedTriangleInstructions)
-  const gravityCircleControlsClicked = useAppSelector((state) => state.playedInstructions.playedGravityCircleInstructions)
-  const droneHexagonControlsClicked = useAppSelector((state) => state.playedInstructions.playedDroneHexagonInstructions)
-  const oneShotRectangleControlsclicked = useAppSelector((state) => state.playedInstructions.playedOneShotRectangleInstructions)
+  const ballControlsClicked = useAppSelector(
+    (state) => state.playedInstructions.playedBallInstructions
+  )
+  const triangleControlsClicked = useAppSelector(
+    (state) => state.playedInstructions.playedTriangleInstructions
+  )
+  const gravityCircleControlsClicked = useAppSelector(
+    (state) => state.playedInstructions.playedGravityCircleInstructions
+  )
+  const droneHexagonControlsClicked = useAppSelector(
+    (state) => state.playedInstructions.playedDroneHexagonInstructions
+  )
+  const oneShotRectangleControlsclicked = useAppSelector(
+    (state) => state.playedInstructions.playedOneShotRectangleInstructions
+  )
 
   // instructions and its animation controls
   const ballLine1 = 'Balls are consistent. They like to pick one note and keep playing it'
   const ballLine2 = `throw it away if you don't like what it's playing`
-  const ballInstructionsControl = useAnimation();
+  const ballInstructionsControl = useAnimation()
 
   const triangleLine1 = `Triangles are unpredictable...`
   const triangleLine2 = `even the notes they play are random`
-  const triangleInstructionsControl = useAnimation();
+  const triangleInstructionsControl = useAnimation()
 
   const gravityBallLine1 = `Did you know you can move the black ball with your mouse?`
-  const gravityBallInstructionsControl = useAnimation();
+  const gravityBallInstructionsControl = useAnimation()
 
   const droneHexagonLine1 = `The hexagon doesn't like craziness..`
   const droneHexagonLine2 = `it will only play as long as it is touching the black ball`
-  const droneHexagonInstructionsControl = useAnimation();
+  const droneHexagonInstructionsControl = useAnimation()
 
-  const oneShotRectangleLine1 = `The rectangle likes flashy entrances`;
-  const oneShotRectangleLine2 = `enjoy what the rectangle has prepared for you`;
-  const oneShotRectangleInstructionsControl = useAnimation();
+  const oneShotRectangleLine1 = `The rectangle likes flashy entrances`
+  const oneShotRectangleLine2 = `enjoy what the rectangle has prepared for you`
+  const oneShotRectangleInstructionsControl = useAnimation()
 
   // handlers
   async function handleBallAnimationStart() {
     await ballInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
+    await new Promise((r) => setTimeout(r, 2000))
     await ballInstructionsControl.start('hidden')
   }
   async function handleTriangleAnimationStart() {
     await triangleInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
+    await new Promise((r) => setTimeout(r, 2000))
     await triangleInstructionsControl.start('hidden')
   }
   async function handleGravityCircleAnimationStart() {
     await gravityBallInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
+    await new Promise((r) => setTimeout(r, 2000))
     await gravityBallInstructionsControl.start('hidden')
   }
   async function handleDroneHexagonAnimationStart() {
     await droneHexagonInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
+    await new Promise((r) => setTimeout(r, 2000))
     await droneHexagonInstructionsControl.start('hidden')
   }
   async function handleOneShotRectangleAnimationStart() {
     await oneShotRectangleInstructionsControl.start('visible')
-    await new Promise(r => setTimeout(r, 2000))
+    await new Promise((r) => setTimeout(r, 2000))
     await oneShotRectangleInstructionsControl.start('hidden')
   }
 
@@ -70,34 +80,33 @@ const Instructions = (props: InstructionsProp) => {
 
   useEffect(() => {
     if (ballControlsClicked) {
-      handleBallAnimationStart();
+      handleBallAnimationStart()
     }
   }, [ballControlsClicked])
 
   useEffect(() => {
     if (triangleControlsClicked) {
-      handleTriangleAnimationStart();
+      handleTriangleAnimationStart()
     }
   }, [triangleControlsClicked])
 
   useEffect(() => {
     if (gravityCircleControlsClicked) {
-      handleGravityCircleAnimationStart();
+      handleGravityCircleAnimationStart()
     }
   }, [gravityCircleControlsClicked])
 
   useEffect(() => {
     if (droneHexagonControlsClicked) {
-      handleDroneHexagonAnimationStart();
+      handleDroneHexagonAnimationStart()
     }
   }, [droneHexagonControlsClicked])
 
   useEffect(() => {
     if (oneShotRectangleControlsclicked) {
-      handleOneShotRectangleAnimationStart();
+      handleOneShotRectangleAnimationStart()
     }
   }, [oneShotRectangleControlsclicked])
-
 
   // variants
   const sentence = {
@@ -106,7 +115,7 @@ const Instructions = (props: InstructionsProp) => {
       transition: {
         delay: 0.9,
         staggerChildren: 0.01,
-      }
+      },
     },
     visible: {
       opacity: 1,
@@ -121,7 +130,7 @@ const Instructions = (props: InstructionsProp) => {
     visible: {
       opacity: 1,
       y: 0,
-    }
+    },
   }
 
   // create sentence animation components
@@ -177,11 +186,7 @@ const Instructions = (props: InstructionsProp) => {
 
   return (
     <>
-      <InstructionsContainer
-        variants={sentence}
-        initial='hidden'
-        animate={ballInstructionsControl}
-      >
+      <InstructionsContainer variants={sentence} initial="hidden" animate={ballInstructionsControl}>
         {ballSentence1}
         <br />
         {ballSentence2}
@@ -189,7 +194,7 @@ const Instructions = (props: InstructionsProp) => {
 
       <InstructionsContainer
         variants={sentence}
-        initial='hidden'
+        initial="hidden"
         animate={triangleInstructionsControl}
       >
         {triangleSentence1}
@@ -199,7 +204,7 @@ const Instructions = (props: InstructionsProp) => {
 
       <InstructionsContainer
         variants={sentence}
-        initial='hidden'
+        initial="hidden"
         animate={gravityBallInstructionsControl}
       >
         {gravityBallSentence1}
@@ -207,7 +212,7 @@ const Instructions = (props: InstructionsProp) => {
 
       <InstructionsContainer
         variants={sentence}
-        initial='hidden'
+        initial="hidden"
         animate={droneHexagonInstructionsControl}
       >
         {droneHexagonSentence1}
@@ -217,7 +222,7 @@ const Instructions = (props: InstructionsProp) => {
 
       <InstructionsContainer
         variants={sentence}
-        initial='hidden'
+        initial="hidden"
         animate={oneShotRectangleInstructionsControl}
       >
         {oneShotRectangleSentence1}
@@ -228,4 +233,4 @@ const Instructions = (props: InstructionsProp) => {
   )
 }
 
-export default Instructions;
+export default Instructions
