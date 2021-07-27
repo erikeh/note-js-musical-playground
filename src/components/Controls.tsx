@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button } from 'bulma-styled-components';
+import { Button } from 'react-bulma-components';
 import { motion } from 'framer-motion';
 import { useAppSelector } from '../app/hooks';
 
@@ -31,6 +30,7 @@ const IconButton = styled(Button)`
   font-size: 25px;
   padding: 15px 25px 0 25px;
   &:hover {
+    cursor: default;
     cursor: ${(props) => (props.disabled ? undefined : 'pointer')};
   }
 `;
@@ -79,7 +79,10 @@ export default function Controls(props: ControlsProps) {
             onClick={handleNewRandomTriangleClick}
             disabled={otherInstructionsPlaying('triangle')}
           >
-            <motion.i className="fas fa-exclamation-triangle" whileHover={{ scale: 1.1 }} />
+            <motion.i
+              className="fas fa-exclamation-triangle"
+              whileHover={{ scale: 1.1 }}
+            />
           </IconButton>
           <IconButton
             onClick={handleNewGravityCircleClick}

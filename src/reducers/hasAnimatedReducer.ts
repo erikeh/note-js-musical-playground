@@ -3,12 +3,20 @@ import { RootState } from '../app/store';
 
 export const playedBallInstructions = createAction('PLAYED_BALL_INSTRUCTIONS');
 export const playedTriangleInstructions = createAction('PLAYED_TRIANGLE_INSTRUCTIONS');
-export const playedGravityCircleInstructions = createAction('PLAYED_GRAVITY_CIRCLE_INSTRUCTIONS');
-export const playedOneShotRectangleInstructions = createAction('PLAYED_ONE_SHOT_INSTRUCTIONS');
-export const playedDroneHexagonInstructions = createAction('PLAYED_DRONE_HEXAGON_INSTRUCTIONS');
+export const playedGravityCircleInstructions = createAction(
+  'PLAYED_GRAVITY_CIRCLE_INSTRUCTIONS'
+);
+export const playedOneShotRectangleInstructions = createAction(
+  'PLAYED_ONE_SHOT_INSTRUCTIONS'
+);
+export const playedDroneHexagonInstructions = createAction(
+  'PLAYED_DRONE_HEXAGON_INSTRUCTIONS'
+);
 
 export const playingBallInstructions = createAction<boolean>('PLAYING_BALL_INSTRUCTIONS');
-export const playingTriangleInstructions = createAction<boolean>('PLAYING_TRIANGLE_INSTRUCTIONS');
+export const playingTriangleInstructions = createAction<boolean>(
+  'PLAYING_TRIANGLE_INSTRUCTIONS'
+);
 export const playingGravityCircleInstructions = createAction<boolean>(
   'PLAYING_GRAVITY_CIRCLE_INSTRUCTIONS'
 );

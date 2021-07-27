@@ -1,4 +1,3 @@
-import { addSound, removeSound } from '../reducers/currentlyPlayingReducer';
 import {
   playedBallInstructions,
   playedTriangleInstructions,
@@ -11,8 +10,6 @@ import {
 } from '../reducers/hasAnimatedReducer';
 
 const allActions = {
-  addSound,
-  removeSound,
   playedBallInstructions,
   playedTriangleInstructions,
   playedGravityCircleInstructions,
@@ -21,6 +18,6 @@ const allActions = {
   playingBallInstructions,
   playingTriangleInstructions,
   playingGravityCircleInstructions,
-}
+};
 
 export default allActions;

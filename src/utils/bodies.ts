@@ -1,54 +1,54 @@
-import Matter from 'matter-js'
-import MatterAttractors from 'matter-attractors'
+import Matter from 'matter-js';
+import MatterAttractors from 'matter-attractors';
 import {
   soundColorOptionsChord,
   soundColorOptionsDrone,
   soundColorOptionsPluck,
   soundColorOptionsOneShot,
-} from './soundColorOptions'
+} from './soundColorOptions';
 
-Matter.use(MatterAttractors)
+Matter.use(MatterAttractors);
 
 export interface UsefulBody extends Matter.Body {
-  sound: string
-  nextChord?: Function
-  nextRandomNote?: Function
+  sound: string;
+  nextChord?: Function;
+  nextRandomNote?: Function;
 }
 
 // helper functions
 function selectRandomOption(option) {
-  const optionKeys = Object.keys(option)
+  const optionKeys = Object.keys(option);
   const randomIndex = Math.floor(
     Matter.Common.random(1, Number(optionKeys[optionKeys.length - 1]) + 1)
-  )
-  return option[randomIndex]
+  );
+  return option[randomIndex];
 }
 
 // useful data store
-let keyMemo: number
+let keyMemo: number;
 
 function randomAngle() {
-  let angle = Math.random() * Math.PI * 2
-  console.log(angle)
-  return angle
+  let angle = Math.random() * Math.PI * 2;
+  console.log(angle);
+  return angle;
 }
 
 function selectNextOption(option) {
-  const optionKeys = Object.keys(option)
+  const optionKeys = Object.keys(option);
   function nextIndex() {
     if (!keyMemo || keyMemo + 1 > optionKeys.length) {
-      keyMemo = Number(optionKeys[0])
-      return option[keyMemo]
+      keyMemo = Number(optionKeys[0]);
+      return option[keyMemo];
     } else if (keyMemo + 1 <= optionKeys.length) {
-      keyMemo++
-      return option[keyMemo]
+      keyMemo++;
+      return option[keyMemo];
     } else {
-      console.log('error, selectNextOption function isnt working')
-      return
+      console.log('error, selectNextOption function isnt working');
+      return;
     }
   }
-  const nextChordOption = nextIndex()
-  return nextChordOption
+  const nextChordOption = nextIndex();
+  return nextChordOption;
 }
 
 // create bodies
@@ -58,7 +58,7 @@ export function createChordRectangle(
   width = 40,
   height = 60
 ) {
-  const option = selectNextOption(soundColorOptionsOneShot)
+  const option = selectNextOption(soundColorOptionsOneShot);
   const square: UsefulBody = Matter.Bodies.rectangle(x, y, width, height, {
     restitution: 2.5,
     collisionFilter: {
@@ -67,13 +67,13 @@ export function createChordRectangle(
     render: {
       fillStyle: option.color,
     },
-  })
-  square.sound = option.sound
+  });
+  square.sound = option.sound;
   square.nextChord = function () {
-    const nextOption = selectNextOption(soundColorOptionsOneShot)
-    return nextOption
-  }
-  return square
+    const nextOption = selectNextOption(soundColorOptionsOneShot);
+    return nextOption;
+  };
+  return square;
 }
 
 export function createCircle(
@@ -81,7 +81,7 @@ export function createCircle(
   y = Math.random() * (window.innerHeight * 0.8),
   radius = Math.random() * 30 + 10
 ) {
-  const option = selectRandomOption(soundColorOptionsPluck)
+  const option = selectRandomOption(soundColorOptionsPluck);
   const circle: UsefulBody = Matter.Bodies.circle(x, y, radius, {
     restitution: 1.02,
     frictionAir: 0,
@@ -93,9 +93,9 @@ export function createCircle(
     render: {
       fillStyle: option.color,
     },
-  })
-  circle.sound = option.sound
-  return circle
+  });
+  circle.sound = option.sound;
+  return circle;
 }
 
 export function createRandomTriangle(
@@ -103,7 +103,7 @@ export function createRandomTriangle(
   y = Math.random() * (window.innerHeight * 0.8),
   radius = Math.random() * 30 + 20
 ) {
-  const option = selectRandomOption(soundColorOptionsPluck)
+  const option = selectRandomOption(soundColorOptionsPluck);
   const triangle: UsefulBody = Matter.Bodies.polygon(x, y, 3, radius, {
     restitution: 1.1,
     frictionAir: 0,
@@ -116,13 +116,13 @@ export function createRandomTriangle(
     render: {
       fillStyle: option.color,
     },
-  })
-  triangle.sound = option.sound
+  });
+  triangle.sound = option.sound;
   triangle.nextRandomNote = function () {
-    const randomNote = selectRandomOption(soundColorOptionsPluck)
-    return randomNote
-  }
-  return triangle
+    const randomNote = selectRandomOption(soundColorOptionsPluck);
+    return randomNote;
+  };
+  return triangle;
 }
 
 export function createDroneHexagon(
@@ -130,19 +130,25 @@ export function createDroneHexagon(
   y = window.innerHeight * 0.2,
   radius = Math.random() * 20 + 40
 ) {
-  const option = selectRandomOption(soundColorOptionsDrone)
-  const circle: UsefulBody = Matter.Bodies.polygon(x, y, 6, Matter.Common.random(25, 40), {
-    restitution: 0,
-    collisionFilter: {
-      group: -1,
-    },
-    label: 'droneCircle',
-    render: {
-      fillStyle: option.color,
-    },
-  })
-  circle.sound = option.sound
-  return circle
+  const option = selectRandomOption(soundColorOptionsDrone);
+  const circle: UsefulBody = Matter.Bodies.polygon(
+    x,
+    y,
+    6,
+    Matter.Common.random(25, 40),
+    {
+      restitution: 0,
+      collisionFilter: {
+        group: -1,
+      },
+      label: 'droneCircle',
+      render: {
+        fillStyle: option.color,
+      },
+    }
+  );
+  circle.sound = option.sound;
+  return circle;
 }
 
 export function createGravityCircle(
@@ -165,9 +171,9 @@ export function createGravityCircle(
           return {
             x: (bodyA.position.x - bodyB.position.x) * 4e-6,
             y: (bodyA.position.y - bodyB.position.y) * 4e-6,
-          }
+          };
         },
       ],
     },
-  })
+  });
 }

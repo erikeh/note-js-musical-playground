@@ -32,7 +32,8 @@ const Instructions = (props: InstructionsProp) => {
   );
 
   // instructions and its animation controls
-  const ballLine1 = 'Balls are consistent. They like to pick one note and keep playing it';
+  const ballLine1 =
+    'Balls are consistent. They like to pick one note and keep playing it';
   const ballLine2 = `throw it away if you don't like what it's playing`;
   const ballInstructionsControl = useAnimation();
 
@@ -192,7 +193,11 @@ const Instructions = (props: InstructionsProp) => {
 
   return (
     <>
-      <InstructionsContainer variants={sentence} initial="hidden" animate={ballInstructionsControl}>
+      <InstructionsContainer
+        variants={sentence}
+        initial="hidden"
+        animate={ballInstructionsControl}
+      >
         {ballSentence1}
         <br />
         {ballSentence2}
