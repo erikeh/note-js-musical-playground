@@ -28,7 +28,6 @@ const AbsoluteContainer = styled.div`
 `;
 const IconButton = styled(Button)`
   background: none;
-  /* color: inherit; */
   border: none;
   padding: 0;
   font: inherit;
@@ -69,7 +68,7 @@ export default function Controls(props: ControlsProps) {
   );
 
   const areOtherInstructionsPlaying = (currentShape: CurrentShape) => {
-    const instructionAnimationStatus = {
+    const instructionAnimationStatuses = {
       circleInstructionsPlaying,
       triangleInstructionsPlaying,
       gravityCircleInstructionsPlaying,
@@ -77,9 +76,9 @@ export default function Controls(props: ControlsProps) {
       droneHexagonInstructionsPlaying,
     };
     const otherInstructionsExceptCurrent = Object.entries(
-      instructionAnimationStatus
-    ).filter((instructionTuple) => {
-      return !instructionTuple[0].includes(currentShape);
+      instructionAnimationStatuses
+    ).filter((instruction) => {
+      return !instruction[0].includes(currentShape);
     });
     return otherInstructionsExceptCurrent.some(
       (otherInstructions) => otherInstructions[1]

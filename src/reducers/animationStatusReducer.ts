@@ -1,6 +1,6 @@
 import { createReducer, createAction } from '@reduxjs/toolkit';
 
-export const playedCircleInstructions = createAction('PLAYED_Circle_INSTRUCTIONS');
+export const playedCircleInstructions = createAction('PLAYED_CIRCLE_INSTRUCTIONS');
 export const playedTriangleInstructions = createAction('PLAYED_TRIANGLE_INSTRUCTIONS');
 export const playedGravityCircleInstructions = createAction(
   'PLAYED_GRAVITY_CIRCLE_INSTRUCTIONS'
@@ -86,6 +86,5 @@ export const animationStatusReducer = createReducer(initialState, (builder) => {
     .addCase(playingOneShotRectangleInstructions, (state = initialState, action) => {
       state.playingOneShotRectangleInstructions = action.payload;
     })
-
     .addDefaultCase((state, action) => {});
 });
