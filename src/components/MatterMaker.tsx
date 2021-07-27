@@ -12,6 +12,8 @@ import {
   createChordRectangle,
   createGravityCircle,
   SoundBody,
+  TriangleSoundBody,
+  RectangleSoundBody,
 } from '../utils/bodies';
 import allActions from '../actions/allActions';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -107,7 +109,7 @@ export default function MatterMaker() {
       fixedSound(bodyB.sound);
     };
     const handleTriangleCollisionStart = (e: IEventCollision<Engine>) => {
-      const collidedTriangle = e.pairs[0].bodyB as SoundBody;
+      const collidedTriangle = e.pairs[0].bodyB as TriangleSoundBody;
       fixedSound(collidedTriangle.sound);
 
       const nextNoteOption = collidedTriangle.nextRandomNote();
@@ -115,7 +117,7 @@ export default function MatterMaker() {
       (collidedTriangle as SoundBody).sound = nextNoteOption.sound;
     };
     const handleRectangleCollisionStart = (e: IEventCollision<Engine>) => {
-      const collidedSquare = e.pairs[0].bodyB as SoundBody;
+      const collidedSquare = e.pairs[0].bodyB as RectangleSoundBody;
       randomChord(collidedSquare.sound);
       // preparing body for next bounce by changing chord & color
       const nextChordOption = collidedSquare.nextChord();
@@ -131,7 +133,6 @@ export default function MatterMaker() {
           body.render.fillStyle = '#79ADDC';
         }
       });
-      // gravityCircle.render.fillStyle = '#79ADDC';
     };
     const handleDroneCollisionEnd = (e: IEventCollision<Engine>) => {
       drone1.fade(0.5, 0, 50);
@@ -141,7 +142,6 @@ export default function MatterMaker() {
           body.render.fillStyle = 'black';
         }
       });
-      // gravityCircle.render.fillStyle = 'black';
     };
 
     const debouncedHandleCircleCollisionStart = debounce(
@@ -198,9 +198,9 @@ export default function MatterMaker() {
 
       Composite.allBodies(engine.world).forEach((body) => {
         if (
-          body.position.y > height + 40 ||
+          body.position.y > height! + 40 ||
           body.position.y < -40 ||
-          body.position.x > width + 40 ||
+          body.position.x > width! + 40 ||
           body.position.x < -40
         ) {
           Composite.remove(engine.world, body);

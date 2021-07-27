@@ -11,9 +11,13 @@ import {
 Matter.use(MatterAttractors);
 
 export interface SoundBody extends Matter.Body {
-  sound?: string;
-  nextChord?: Function;
-  nextRandomNote?: Function;
+  sound: string;
+}
+export interface TriangleSoundBody extends SoundBody {
+  nextRandomNote: Function;
+}
+export interface RectangleSoundBody extends SoundBody {
+  nextChord: Function;
 }
 
 // helper functions
@@ -50,37 +54,13 @@ function selectNextOption(options: SoundColorOptions) {
 }
 
 // create bodies
-export function createChordRectangle(
-  x = Math.random() * (window.innerWidth * 0.8),
-  y = Math.random() * (window.innerHeight * 0.8),
-  width = 40,
-  height = 60
-): SoundBody {
-  const option = selectNextOption(soundColorOptionsOneShot);
-  const rectangle: SoundBody = Matter.Bodies.rectangle(x, y, width, height, {
-    restitution: 2.5,
-    collisionFilter: {
-      group: -1,
-    },
-    render: {
-      fillStyle: option.color,
-    },
-  });
-  rectangle.sound = option.sound;
-  rectangle.nextChord = function () {
-    const nextOption = selectNextOption(soundColorOptionsOneShot);
-    return nextOption;
-  };
-  return rectangle;
-}
-
 export function createCircle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
   radius = Math.random() * 30 + 10
 ): SoundBody {
   const option = selectRandomOption(soundColorOptionsPluck);
-  const circle: SoundBody = Matter.Bodies.circle(x, y, radius, {
+  const circle = Matter.Bodies.circle(x, y, radius, {
     restitution: 1.02,
     frictionAir: 0,
     friction: 0,
@@ -92,17 +72,17 @@ export function createCircle(
       fillStyle: option.color,
     },
   });
-  circle.sound = option.sound;
-  return circle;
+  (circle as SoundBody).sound = option.sound;
+  return circle as SoundBody;
 }
 
 export function createRandomTriangle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
   radius = Math.random() * 30 + 20
-): SoundBody {
+): TriangleSoundBody {
   const option = selectRandomOption(soundColorOptionsPluck);
-  const triangle: SoundBody = Matter.Bodies.polygon(x, y, 3, radius, {
+  const triangle = Matter.Bodies.polygon(x, y, 3, radius, {
     restitution: 1.1,
     frictionAir: 0,
     friction: 0,
@@ -115,40 +95,13 @@ export function createRandomTriangle(
       fillStyle: option.color,
     },
   });
-  triangle.sound = option.sound;
-  triangle.nextRandomNote = function () {
+  (triangle as TriangleSoundBody).sound = option.sound;
+  (triangle as TriangleSoundBody).nextRandomNote = function () {
     const randomNote = selectRandomOption(soundColorOptionsPluck);
     return randomNote;
   };
-  return triangle;
+  return triangle as TriangleSoundBody;
 }
-
-export function createDroneHexagon(
-  x = window.innerWidth * 0.2,
-  y = window.innerHeight * 0.2,
-  radius = Math.random() * 20 + 40
-) {
-  const option = selectRandomOption(soundColorOptionsDrone);
-  const hexagon: SoundBody = Matter.Bodies.polygon(
-    x,
-    y,
-    6,
-    Matter.Common.random(25, 40),
-    {
-      restitution: 0,
-      collisionFilter: {
-        group: -1,
-      },
-      label: 'droneCircle',
-      render: {
-        fillStyle: option.color,
-      },
-    }
-  );
-  hexagon.sound = option.sound;
-  return hexagon;
-}
-
 export function createGravityCircle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
@@ -174,4 +127,48 @@ export function createGravityCircle(
       ],
     },
   });
+}
+
+export function createDroneHexagon(
+  x = window.innerWidth * 0.2,
+  y = window.innerHeight * 0.2,
+  radius = Math.random() * 20 + 40
+): SoundBody {
+  const option = selectRandomOption(soundColorOptionsDrone);
+  const hexagon = Matter.Bodies.polygon(x, y, 6, Matter.Common.random(25, 40), {
+    restitution: 0,
+    collisionFilter: {
+      group: -1,
+    },
+    label: 'droneCircle',
+    render: {
+      fillStyle: option.color,
+    },
+  });
+  (hexagon as SoundBody).sound = option.sound;
+  return hexagon as SoundBody;
+}
+
+export function createChordRectangle(
+  x = Math.random() * (window.innerWidth * 0.8),
+  y = Math.random() * (window.innerHeight * 0.8),
+  width = 40,
+  height = 60
+): RectangleSoundBody {
+  const option = selectNextOption(soundColorOptionsOneShot);
+  const rectangle = Matter.Bodies.rectangle(x, y, width, height, {
+    restitution: 2.5,
+    collisionFilter: {
+      group: -1,
+    },
+    render: {
+      fillStyle: option.color,
+    },
+  });
+  (rectangle as RectangleSoundBody).sound = option.sound;
+  (rectangle as RectangleSoundBody).nextChord = function () {
+    const nextOption = selectNextOption(soundColorOptionsOneShot);
+    return nextOption;
+  };
+  return rectangle as RectangleSoundBody;
 }
