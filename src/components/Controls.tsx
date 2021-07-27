@@ -12,6 +12,13 @@ interface ControlsProps {
   handleDeleteAllBodiesClick: () => void;
 }
 
+type CurrentShape =
+  | 'circle'
+  | 'triangle'
+  | 'gravityCircle'
+  | 'droneHexagon'
+  | 'oneShotRectangle';
+
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -45,39 +52,53 @@ export default function Controls(props: ControlsProps) {
     handleDeleteAllBodiesClick,
   } = props;
 
-  const ballInstructionsPlaying = useAppSelector(
-    (state) => state.playedInstructions.playingBallInstructions
+  const circleInstructionsPlaying = useAppSelector(
+    (state) => state.animationStatus.playingCircleInstructions
   );
   const triangleInstructionsPlaying = useAppSelector(
-    (state) => state.playedInstructions.playingTriangleInstructions
+    (state) => state.animationStatus.playingTriangleInstructions
   );
   const gravityCircleInstructionsPlaying = useAppSelector(
-    (state) => state.playedInstructions.playingGravityCircleInstructions
+    (state) => state.animationStatus.playingGravityCircleInstructions
+  );
+  const oneShotRectangleInstructionsPlaying = useAppSelector(
+    (state) => state.animationStatus.playingOneShotRectangleInstructions
+  );
+  const droneHexagonInstructionsPlaying = useAppSelector(
+    (state) => state.animationStatus.playingDroneHexagonInstructions
   );
 
-  const otherInstructionsPlaying = (currentShape: string) => {
-    const instructions = {
-      ballInstructionsPlaying,
+  const areOtherInstructionsPlaying = (currentShape: CurrentShape) => {
+    const instructionAnimationStatus = {
+      circleInstructionsPlaying,
       triangleInstructionsPlaying,
       gravityCircleInstructionsPlaying,
+      oneShotRectangleInstructionsPlaying,
+      droneHexagonInstructionsPlaying,
     };
-    return Object.entries(instructions)
-      .filter((instructionTuple) => {
-        return !instructionTuple[0].includes(currentShape);
-      })
-      .some((otherInstructions) => otherInstructions[1] === true);
+    const otherInstructionsExceptCurrent = Object.entries(
+      instructionAnimationStatus
+    ).filter((instructionTuple) => {
+      return !instructionTuple[0].includes(currentShape);
+    });
+    return otherInstructionsExceptCurrent.some(
+      (otherInstructions) => otherInstructions[1]
+    );
   };
 
   return (
     <div>
       <ButtonContainer>
         <AbsoluteContainer>
-          <IconButton onClick={handleNewCircleClick}>
+          <IconButton
+            onClick={handleNewCircleClick}
+            disabled={areOtherInstructionsPlaying('circle')}
+          >
             <motion.i className="fa fa-music" whileHover={{ scale: 1.1 }} />
           </IconButton>
           <IconButton
             onClick={handleNewRandomTriangleClick}
-            disabled={otherInstructionsPlaying('triangle')}
+            disabled={areOtherInstructionsPlaying('triangle')}
           >
             <motion.i
               className="fas fa-exclamation-triangle"
@@ -86,19 +107,19 @@ export default function Controls(props: ControlsProps) {
           </IconButton>
           <IconButton
             onClick={handleNewGravityCircleClick}
-            disabled={otherInstructionsPlaying('gravityCircle')}
+            disabled={areOtherInstructionsPlaying('gravityCircle')}
           >
             <motion.i className="fas fa-circle" whileHover={{ scale: 1.1 }} />
           </IconButton>
           <IconButton
             onClick={handleNewDroneHexagonClick}
-            disabled={otherInstructionsPlaying('droneHexagon')}
+            disabled={areOtherInstructionsPlaying('droneHexagon')}
           >
             <motion.i className="fas fa-om" whileHover={{ scale: 1.1 }} />
           </IconButton>
           <IconButton
             onClick={handleNewOneShotRectangleClick}
-            disabled={otherInstructionsPlaying('oneShotRectangle')}
+            disabled={areOtherInstructionsPlaying('oneShotRectangle')}
           >
             <motion.i className="fas fa-bahai" whileHover={{ scale: 1.1 }} />
           </IconButton>

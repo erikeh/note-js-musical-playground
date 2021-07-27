@@ -1,7 +1,6 @@
-import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../app/store';
+import { createReducer, createAction } from '@reduxjs/toolkit';
 
-export const playedBallInstructions = createAction('PLAYED_BALL_INSTRUCTIONS');
+export const playedCircleInstructions = createAction('PLAYED_Circle_INSTRUCTIONS');
 export const playedTriangleInstructions = createAction('PLAYED_TRIANGLE_INSTRUCTIONS');
 export const playedGravityCircleInstructions = createAction(
   'PLAYED_GRAVITY_CIRCLE_INSTRUCTIONS'
@@ -13,7 +12,9 @@ export const playedDroneHexagonInstructions = createAction(
   'PLAYED_DRONE_HEXAGON_INSTRUCTIONS'
 );
 
-export const playingBallInstructions = createAction<boolean>('PLAYING_BALL_INSTRUCTIONS');
+export const playingCircleInstructions = createAction<boolean>(
+  'PLAYING_CIRCLE_INSTRUCTIONS'
+);
 export const playingTriangleInstructions = createAction<boolean>(
   'PLAYING_TRIANGLE_INSTRUCTIONS'
 );
@@ -28,8 +29,8 @@ export const playingDroneHexagonInstructions = createAction<boolean>(
 );
 
 interface HasAnimatedState {
-  playedBallInstructions: boolean;
-  playingBallInstructions: boolean;
+  playedCircleInstructions: boolean;
+  playingCircleInstructions: boolean;
   playedTriangleInstructions: boolean;
   playingTriangleInstructions: boolean;
   playedGravityCircleInstructions: boolean;
@@ -41,8 +42,8 @@ interface HasAnimatedState {
 }
 
 const initialState: HasAnimatedState = {
-  playedBallInstructions: false,
-  playingBallInstructions: false,
+  playedCircleInstructions: false,
+  playingCircleInstructions: false,
   playedTriangleInstructions: false,
   playingTriangleInstructions: false,
   playedGravityCircleInstructions: false,
@@ -55,8 +56,8 @@ const initialState: HasAnimatedState = {
 
 export const animationStatusReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(playedBallInstructions, (state = initialState, action) => {
-      state.playedBallInstructions = true;
+    .addCase(playedCircleInstructions, (state = initialState, action) => {
+      state.playedCircleInstructions = true;
     })
     .addCase(playedTriangleInstructions, (state = initialState, action) => {
       state.playedTriangleInstructions = true;
@@ -70,8 +71,21 @@ export const animationStatusReducer = createReducer(initialState, (builder) => {
     .addCase(playedDroneHexagonInstructions, (state = initialState, action) => {
       state.playedDroneHexagonInstructions = true;
     })
-    .addCase(playingBallInstructions, (state = initialState, action) => {
-      state.playingBallInstructions = action.payload;
+    .addCase(playingCircleInstructions, (state = initialState, action) => {
+      state.playingCircleInstructions = action.payload;
     })
+    .addCase(playingTriangleInstructions, (state = initialState, action) => {
+      state.playingTriangleInstructions = action.payload;
+    })
+    .addCase(playingGravityCircleInstructions, (state = initialState, action) => {
+      state.playingGravityCircleInstructions = action.payload;
+    })
+    .addCase(playingDroneHexagonInstructions, (state = initialState, action) => {
+      state.playingDroneHexagonInstructions = action.payload;
+    })
+    .addCase(playingOneShotRectangleInstructions, (state = initialState, action) => {
+      state.playingOneShotRectangleInstructions = action.payload;
+    })
+
     .addDefaultCase((state, action) => {});
 });

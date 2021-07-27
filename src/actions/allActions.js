@@ -1,10 +1,10 @@
 import {
-  playedBallInstructions,
+  playedCircleInstructions,
   playedTriangleInstructions,
   playedGravityCircleInstructions,
   playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
-  playingBallInstructions,
+  playingCircleInstructions,
   playingTriangleInstructions,
   playingGravityCircleInstructions,
   playingOneShotRectangleInstructions,
@@ -12,12 +12,12 @@ import {
 } from '../reducers/animationStatusReducer';
 
 const allActions = {
-  playedBallInstructions,
+  playedCircleInstructions,
   playedTriangleInstructions,
   playedGravityCircleInstructions,
   playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
-  playingBallInstructions,
+  playingCircleInstructions,
   playingTriangleInstructions,
   playingGravityCircleInstructions,
   playingOneShotRectangleInstructions,

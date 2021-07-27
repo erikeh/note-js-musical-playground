@@ -20,8 +20,7 @@ Matter.use('matter-attractors');
 
 export default function MatterMaker() {
   const {
-    playedBallInstructions,
-    playingBallInstructions,
+    playedCircleInstructions,
     playedTriangleInstructions,
     playedGravityCircleInstructions,
     playedOneShotRectangleInstructions,
@@ -45,7 +44,7 @@ export default function MatterMaker() {
 
   // event handlers
   function handleNewCircleClick(): void {
-    dispatch(playedBallInstructions());
+    dispatch(playedCircleInstructions());
     Composite.add(engine.world, createCircle());
   }
 
