@@ -1,19 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import Instructions from './Instructions';
-import Controls from './Controls';
-import { fixedSound, randomChord, drone1 } from './sounds';
-import { debounce } from 'debounce';
-import Matter, { Body, World } from 'matter-js';
-import { bgColorGen } from '../utils/colorGen';
-import { createCircle, createRandomTriangle, createDroneHexagon, createChordRectangle, createGravityCircle } from '../utils/bodies';
-import styled from 'styled-components';
-import { Button, Icon } from 'bulma-styled-components';
-import allActions from '../actions/allActions';
-import { motion } from 'framer-motion'
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useEffect, useRef } from 'react'
+import { useAppDispatch } from '../app/hooks'
+import Controls from './Controls'
+import { fixedSound, randomChord, drone1 } from './sounds'
+import { debounce } from 'debounce'
+import Matter, { Body, Engine, IEventCollision } from 'matter-js'
+import { bgColorGen } from '../utils/colorGen'
+import {
+  createCircle,
+  createRandomTriangle,
+  createDroneHexagon,
+  createChordRectangle,
+  createGravityCircle,
+  UsefulBody,
+} from '../utils/bodies'
+import allActions from '../actions/allActions'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
-Matter.use('matter-attractors');
+Matter.use('matter-attractors')
 
 export default function MatterMaker() {
   const {
@@ -21,68 +24,62 @@ export default function MatterMaker() {
     playedTriangleInstructions,
     playedGravityCircleInstructions,
     playedOneShotRectangleInstructions,
-    playedDroneHexagonInstructions
-  } = allActions;
+    playedDroneHexagonInstructions,
+  } = allActions
 
-  const dispatch = useAppDispatch();
-  const canvasRef = useRef(null);
+  const dispatch = useAppDispatch()
+  const canvasRef = useRef(null)
 
   // Matter aliases
   const Engine = Matter.Engine,
-  Render = Matter.Render,
-  Runner = Matter.Runner,
-  Composite = Matter.Composite,
-  Events = Matter.Events,
-  Mouse = Matter.Mouse,
-  MouseConstraint = Matter.MouseConstraint;
+    Render = Matter.Render,
+    Runner = Matter.Runner,
+    Composite = Matter.Composite,
+    Events = Matter.Events,
+    Mouse = Matter.Mouse,
+    MouseConstraint = Matter.MouseConstraint
 
   // create an engine
-  const engine = Engine.create();
+  const engine = Engine.create()
 
   // event handlers
   function handleNewCircleClick(): void {
-    dispatch(playedBallInstructions());
-    Composite.add(engine.world, createCircle());
+    dispatch(playedBallInstructions())
+    Composite.add(engine.world, createCircle())
   }
 
   function handleNewRandomTriangleClick() {
-    dispatch(playedTriangleInstructions);
-    Composite.add(engine.world, createRandomTriangle());
-  }
-
-  function handleNewDroneHexagonClick() {
-    dispatch(playedGravityCircleInstructions);
-    Composite.add(engine.world, createDroneHexagon());
+    dispatch(playedTriangleInstructions())
+    Composite.add(engine.world, createRandomTriangle())
   }
 
   function handleNewGravityCircleClick() {
-    if (!playedGravityBall) {
-      handleGravityBallAnimationStart();
-      playedGravityBall = true;
-    }
+    dispatch(playedGravityCircleInstructions())
     Composite.add(engine.world, createGravityCircle())
   }
 
+  function handleNewDroneHexagonClick() {
+    dispatch(playedDroneHexagonInstructions())
+    Composite.add(engine.world, createDroneHexagon())
+  }
+
   function handleNewOneShotRectangleClick() {
-    if (!playedOneShot) {
-      handleOneShotRectangleAnimationStart();
-      playedOneShot = true;
-    }
+    dispatch(playedOneShotRectangleInstructions())
     Composite.add(engine.world, createChordRectangle())
   }
 
   function handleDeleteAllBodiesClick() {
-    const allBodies = Composite.allBodies(engine.world);
-    allBodies.forEach(body => {
+    const allBodies = Composite.allBodies(engine.world)
+    allBodies.forEach((body) => {
       if (body.label !== 'gravityCircle') {
         Composite.remove(engine.world, body)
       }
     })
   }
   function handleGravityOn() {
-    engine.gravity.y = 1;
-    engine.gravity.scale = 0.001;
-    console.log(engine.gravity);
+    engine.gravity.y = 1
+    engine.gravity.scale = 0.001
+    console.log(engine.gravity)
   }
 
   useEffect(() => {
@@ -97,36 +94,36 @@ export default function MatterMaker() {
         height: window.innerHeight,
         width: window.innerWidth,
       },
-    });
+    })
 
     const gravityCircle = createGravityCircle(render.options.width / 2, render.options.height / 2)
 
     // collision handlers
-    const handleNoteCollisionStart = (e) => {
-      const bodyB = e.pairs[0].bodyB;
-      fixedSound(bodyB.sound);
+    const handleNoteCollisionStart = (e: IEventCollision<Engine>) => {
+      const bodyB = e.pairs[0].bodyB
+      fixedSound((bodyB as UsefulBody).sound)
     }
     const handleRandomNoteCollisionStart = (e) => {
-      const collidedTriangle = e.pairs[0].bodyB;
-      fixedSound(collidedTriangle.sound);
+      const collidedTriangle = e.pairs[0].bodyB
+      fixedSound(collidedTriangle.sound)
 
-    const nextNoteOption = collidedTriangle.nextRandomNote();
-      collidedTriangle.render.fillStyle = nextNoteOption.color;
-      collidedTriangle.sound = nextNoteOption.sound;
+      const nextNoteOption = collidedTriangle.nextRandomNote()
+      collidedTriangle.render.fillStyle = nextNoteOption.color
+      collidedTriangle.sound = nextNoteOption.sound
     }
     const handleChordCollisionStart = (e) => {
-      const collidedSquare = e.pairs[0].bodyB;
-      randomChord(collidedSquare.sound);
+      const collidedSquare = e.pairs[0].bodyB
+      randomChord(collidedSquare.sound)
       // preparing body for next bounce by changing chord & color
-      const nextChordOption = collidedSquare.nextChord();
-      collidedSquare.render.fillStyle = nextChordOption.color;
-      collidedSquare.sound = nextChordOption.sound;
+      const nextChordOption = collidedSquare.nextChord()
+      collidedSquare.render.fillStyle = nextChordOption.color
+      collidedSquare.sound = nextChordOption.sound
       render.options.background = `#${bgColorGen()}`
     }
     const handleDroneCollisionStart = (e) => {
-      drone1.play();
+      drone1.play()
       drone1.fade(0, 0.5, 120)
-      Composite.allBodies(engine.world).forEach(body => {
+      Composite.allBodies(engine.world).forEach((body) => {
         if (body.label === 'gravityCircle') {
           body.render.fillStyle = '#79ADDC'
         }
@@ -136,7 +133,7 @@ export default function MatterMaker() {
     const handleDroneCollisionEnd = (e) => {
       drone1.fade(0.5, 0, 50)
       drone1.once('fade', drone1.pause)
-      Composite.allBodies(engine.world).forEach(body => {
+      Composite.allBodies(engine.world).forEach((body) => {
         if (body.label === 'gravityCircle') {
           body.render.fillStyle = 'black'
         }
@@ -144,65 +141,71 @@ export default function MatterMaker() {
       // gravityCircle.render.fillStyle = 'black';
     }
 
-    const debouncedHandleNoteCollisionStart = debounce(handleNoteCollisionStart, 10, true);
-    const debouncedHandleRandomNoteCollisionStart = debounce(handleRandomNoteCollisionStart, 10, true);
-    const debouncedHandleChordCollisionStart = debounce(handleChordCollisionStart, 800, true);
+    const debouncedHandleNoteCollisionStart = debounce(handleNoteCollisionStart, 10, true)
+    const debouncedHandleRandomNoteCollisionStart = debounce(
+      handleRandomNoteCollisionStart,
+      10,
+      true
+    )
+    const debouncedHandleChordCollisionStart = debounce(handleChordCollisionStart, 800, true)
     const debouncedHandleDroneCollisionStart = debounce(handleDroneCollisionStart, 100, true)
-
 
     // event listeners
     Events.on(engine, 'collisionStart', (e) => {
-      const pairs = e.pairs[0];
+      const pairs = e.pairs[0]
       if (pairs.bodyB.label === 'Rectangle Body') {
-        debouncedHandleChordCollisionStart(e);
+        debouncedHandleChordCollisionStart(e)
       } else if (pairs.bodyB.label === 'droneCircle') {
-        debouncedHandleDroneCollisionStart(e);
+        debouncedHandleDroneCollisionStart(e)
       } else if (pairs.bodyB.label === 'randomCircle') {
-        debouncedHandleRandomNoteCollisionStart(e);
+        debouncedHandleRandomNoteCollisionStart(e)
       } else {
-        debouncedHandleNoteCollisionStart(e);
+        debouncedHandleNoteCollisionStart(e)
       }
-    });
+    })
 
     Events.on(engine, 'collisionActive', (e) => {
       const bodyA = e.pairs[0].bodyA
       const bodyB = e.pairs[0].bodyB
       if (bodyA.label === 'gravityCircle' && bodyB.label === 'droneCircle') {
-
       }
     })
     Events.on(engine, 'collisionEnd', (e) => {
-      const bodyB = e.pairs[0].bodyB;
-        if (bodyB.label === 'droneCircle') {
-          handleDroneCollisionEnd(e)
-        }
+      const bodyB = e.pairs[0].bodyB
+      if (bodyB.label === 'droneCircle') {
+        handleDroneCollisionEnd(e)
+      }
     })
 
     Events.on(engine, 'afterUpdate', () => {
-      const height = render.options.height;
-      const width = render.options.width;
+      const height = render.options.height
+      const width = render.options.width
 
-      Composite.allBodies(engine.world).forEach(body => {
-        if (body.position.y > height + 40 || body.position.y < -40 || body.position.x > width + 40 || body.position.x < -40) {
+      Composite.allBodies(engine.world).forEach((body) => {
+        if (
+          body.position.y > height + 40 ||
+          body.position.y < -40 ||
+          body.position.x > width + 40 ||
+          body.position.x < -40
+        ) {
           Composite.remove(engine.world, body)
         }
       })
     })
 
-
-    const mouse = Mouse.create(render.canvas);
+    const mouse = Mouse.create(render.canvas)
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
       constraint: {
         stiffness: 0.2,
         render: {
-          visible: false
-        }
-      }
-    });
+          visible: false,
+        },
+      },
+    })
 
     Events.on(mouseConstraint, 'mousedown', (e) => {
-      const allBodies = Composite.allBodies(engine.world);
+      const allBodies = Composite.allBodies(engine.world)
       for (let body of allBodies) {
         if (body.label === 'gravityCircle') {
           Body.setStatic(body, false)
@@ -210,7 +213,7 @@ export default function MatterMaker() {
       }
     })
     Events.on(mouseConstraint, 'mouseup', (e) => {
-      const allBodies = Composite.allBodies(engine.world);
+      const allBodies = Composite.allBodies(engine.world)
       for (let body of allBodies) {
         if (body.label === 'gravityCircle') {
           Body.setStatic(body, true)
@@ -218,24 +221,24 @@ export default function MatterMaker() {
       }
     })
 
-    engine.gravity.y = 0;
+    engine.gravity.y = 0
     // add all of the bodies to the world
-    Composite.add(engine.world, [gravityCircle]);
-    Composite.add(engine.world, mouseConstraint);
+    Composite.add(engine.world, [gravityCircle])
+    Composite.add(engine.world, mouseConstraint)
     // run the renderer
-    Render.run(render);
+    Render.run(render)
     // create runner
-    const runner = Runner.create();
+    const runner = Runner.create()
     // run the engine
-    Runner.run(runner, engine);
+    Runner.run(runner, engine)
     return () => {
-      Render.stop(render);
-      Composite.clear(engine.world, false);
-      Engine.clear(engine);
-      render.canvas.remove();
-      render.canvas = null;
-      render.context = null;
-      render.textures = {};
+      Render.stop(render)
+      Composite.clear(engine.world, false)
+      Engine.clear(engine)
+      render.canvas.remove()
+      render.canvas = null
+      render.context = null
+      render.textures = {}
     }
   }, [])
 
@@ -249,7 +252,6 @@ export default function MatterMaker() {
         handleNewOneShotRectangleClick={handleNewOneShotRectangleClick}
         handleDeleteAllBodiesClick={handleDeleteAllBodiesClick}
       />
-
     </div>
   )
 }

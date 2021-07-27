@@ -43,7 +43,6 @@
       "react-app",
       "plugin:prettier/recommended"
     ]
-
   },
   "browserslist": {
     "production": [
@@ -58,8 +57,9 @@
     ]
   },
   "devDependencies": {
+    "@types/debounce": "^1.2.0",
     "@types/howler": "^2.2.3",
-    "@types/matter-js": "^0.17.1",
+    "@types/matter-js": "^0.17.4",
     "@types/styled-components": "^5.1.11",
     "express": "^4.17.1",
     "react-app-rewired": "^2.1.8"
