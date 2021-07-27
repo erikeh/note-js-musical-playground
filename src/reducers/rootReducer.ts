@@ -1,11 +1,9 @@
-import { combineReducers } from "redux"
-import { currentlyPlayingReducer } from './currentlyPlayingReducer';
-import { playedInstructionsReducer } from "./hasAnimatedReducer";
+import { combineReducers } from 'redux';
+import { animationStatusReducer } from './animationStatusReducer';
 
 const rootReducer = combineReducers({
-  currentlyPlaying: currentlyPlayingReducer,
-  playedInstructions: playedInstructionsReducer,
-})
+  animationStatus: animationStatusReducer,
+});
 
 export default rootReducer;
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>;

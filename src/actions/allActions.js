@@ -1,20 +1,27 @@
-import { addSound, removeSound } from '../reducers/currentlyPlayingReducer';
 import {
-  playedBallInstructions,
+  playedCircleInstructions,
   playedTriangleInstructions,
   playedGravityCircleInstructions,
-  playedOneShotInstructions,
+  playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
-} from '../reducers/hasAnimatedReducer';
+  playingCircleInstructions,
+  playingTriangleInstructions,
+  playingGravityCircleInstructions,
+  playingOneShotRectangleInstructions,
+  playingDroneHexagonInstructions,
+} from '../reducers/animationStatusReducer';
 
 const allActions = {
-  addSound,
-  removeSound,
-  playedBallInstructions,
+  playedCircleInstructions,
   playedTriangleInstructions,
   playedGravityCircleInstructions,
-  playedOneShotInstructions,
+  playedOneShotRectangleInstructions,
   playedDroneHexagonInstructions,
-}
+  playingCircleInstructions,
+  playingTriangleInstructions,
+  playingGravityCircleInstructions,
+  playingOneShotRectangleInstructions,
+  playingDroneHexagonInstructions,
+};
 
-export default allActions
+export default allActions;
