@@ -1,7 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { Howl, Howler } from 'howler';
-import Matter from 'matter-js';
+import { Howl } from 'howler';
 
 export const fixedSound = (sound: string) => {
   if (sound) {

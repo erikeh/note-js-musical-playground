@@ -1,7 +1,6 @@
 import Matter from 'matter-js';
 import MatterAttractors from 'matter-attractors';
 import {
-  soundColorOptionsChord,
   soundColorOptionsDrone,
   soundColorOptionsPluck,
   soundColorOptionsOneShot,
@@ -32,11 +31,11 @@ function selectRandomOption(options: SoundColorOptions) {
 // useful data store
 let keyMemo: number;
 
-function randomAngle() {
-  let angle = Math.random() * Math.PI * 2;
-  console.log(angle);
-  return angle;
-}
+// function randomAngle() {
+//   let angle = Math.random() * Math.PI * 2;
+//   console.log(angle);
+//   return angle;
+// }
 
 function selectNextOption(options: SoundColorOptions) {
   const optionKeys = Object.keys(options);

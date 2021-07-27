@@ -8,16 +8,16 @@ This project was created in 2 days as part of Hack Reactor's 2 day 'MVP' challen
 
 ## Motivation
 
-I was highly inspired by the relationship of logic and sound that is present in [Modular Synths](https://www.noiseengineering.us/blog/what-is-a-modular-synth), particularly that of the [ambient music community](https://www.youtube.com/watch?v=GjYENsrLLf4). 
+I was highly inspired by the relationship of logic and sound that is present in [Modular Synths](https://www.noiseengineering.us/blog/what-is-a-modular-synth), particularly that of the [ambient music community](https://www.youtube.com/watch?v=GjYENsrLLf4).
 
 
-> _A quick primer for the uninitiated: Modular synths, unlike traditional music making, is composed of dozens of individual modules that can produce sound, generate control voltage, create logic, or any combination of the above. A user then uses declarative logic to define a set of "guidelines" for the both the timbre and pitch to be sequenced. This can be as simple as saying "all notes should be random", and as complex as implementing multiple levels of nested logic to define the perfect level of "custom randomness"_
+> _A quick primer for the uninitiated: Modular synths, unlike traditional music making, is composed of dozens of individual modules that can produce sound, generate control voltage, create logic, or any combination of the above. A user then uses declarative logic to define a set of "guidelines" for the both the timbre and pitch to be sequenced. This can be as simple as saying "all notes should be random", and as complex as implementing multiple levels of nested logic that can produce a precise sequence of any conceivable length_
 
 
 I wanted to create an abstracted, streamlined UI implementation of how modular music is conceived and created, but simple enough that it would be accessible to anybody with a link. Each shape represents a predefined set of declarative logic that one would commonly use in modular synthesis
 * Circles - Always play the same note at the set interval
 * Triangles - Always randomize the note at the set interval, but make sure that the pitch frequency is defined within the current musical scale
-* Pentagon - Never stop playing the defined note (or notes in this case) as long as the signal/gate is active 
+* Pentagon - Never stop playing the defined note (or notes in this case) as long as the signal/gate is active
 * Rectangle - Round-robin through a defined set of musical notes or tones, and with each time the note is "struck" there is a higher and higher chance that this note will stop playing
 
 ### Then what does the big black-hole in the middle represent? (*Optional ramblings of a modular synth enthusiast*)

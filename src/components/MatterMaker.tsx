@@ -253,7 +253,7 @@ export default function MatterMaker() {
       render.canvas.remove();
       render.textures = {};
     };
-  }, []);
+  }, [Composite, Engine, Events, Mouse, MouseConstraint, Render, Runner, engine]);
 
   return (
     <div ref={canvasRef}>
