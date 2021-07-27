@@ -5,7 +5,7 @@ import {
   soundColorOptionsDrone,
   soundColorOptionsPluck,
   soundColorOptionsOneShot,
-} from '../utils/soundColorOptions';
+} from './soundColorOptions';
 
 Matter.use(MatterAttractors);
 
