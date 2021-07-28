@@ -39,8 +39,7 @@ const Instructions = (props: InstructionsProp) => {
   );
 
   // instructions and its animation controls
-  const circleLine1 =
-    'Circles are consistent. They like to pick one note and keep playing it';
+  const circleLine1 = 'Circles are consistent. They like to pick one note and keep playing it';
   const circleLine2 = `throw it away if you don't like what it's playing`;
   const circleInstructionsControl = useAnimation();
 
@@ -98,11 +97,7 @@ const Instructions = (props: InstructionsProp) => {
     await new Promise((r) => setTimeout(r, 2000));
     await oneShotRectangleInstructionsControl.start('hidden');
     dispatch(playingOneShotRectangleInstructions(false));
-  }, [
-    dispatch,
-    oneShotRectangleInstructionsControl,
-    playingOneShotRectangleInstructions,
-  ]);
+  }, [dispatch, oneShotRectangleInstructionsControl, playingOneShotRectangleInstructions]);
 
   /** states break matterJS if used on MatterMaker.tsx.
    * Current workaround for handling clicks from MatterMaker to other components

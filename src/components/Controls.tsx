@@ -12,12 +12,7 @@ interface ControlsProps {
   handleDeleteAllBodiesClick: () => void;
 }
 
-type CurrentShape =
-  | 'circle'
-  | 'triangle'
-  | 'gravityCircle'
-  | 'droneHexagon'
-  | 'oneShotRectangle';
+type CurrentShape = 'circle' | 'triangle' | 'gravityCircle' | 'droneHexagon' | 'oneShotRectangle';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -75,14 +70,12 @@ export default function Controls(props: ControlsProps) {
       oneShotRectangleInstructionsPlaying,
       droneHexagonInstructionsPlaying,
     };
-    const otherInstructionsExceptCurrent = Object.entries(
-      instructionAnimationStatuses
-    ).filter((instruction) => {
-      return !instruction[0].includes(currentShape);
-    });
-    return otherInstructionsExceptCurrent.some(
-      (otherInstructions) => otherInstructions[1]
+    const otherInstructionsExceptCurrent = Object.entries(instructionAnimationStatuses).filter(
+      (instruction) => {
+        return !instruction[0].includes(currentShape);
+      }
     );
+    return otherInstructionsExceptCurrent.some((otherInstructions) => otherInstructions[1]);
   };
 
   return (
@@ -93,7 +86,10 @@ export default function Controls(props: ControlsProps) {
             onClick={handleNewCircleClick}
             disabled={areOtherInstructionsPlaying('circle')}
           >
-            <motion.i className="fa fa-music" whileHover={{ scale: 1.1 }} />
+            <motion.i
+              className="fa fa-music"
+              whileHover={areOtherInstructionsPlaying('circle') ? {} : { scale: 1.1 }}
+            />
           </IconButton>
           <IconButton
             onClick={handleNewRandomTriangleClick}
@@ -101,26 +97,35 @@ export default function Controls(props: ControlsProps) {
           >
             <motion.i
               className="fas fa-exclamation-triangle"
-              whileHover={{ scale: 1.1 }}
+              whileHover={areOtherInstructionsPlaying('triangle') ? {} : { scale: 1.1 }}
             />
           </IconButton>
           <IconButton
             onClick={handleNewGravityCircleClick}
             disabled={areOtherInstructionsPlaying('gravityCircle')}
           >
-            <motion.i className="fas fa-circle" whileHover={{ scale: 1.1 }} />
+            <motion.i
+              className="fas fa-circle"
+              whileHover={areOtherInstructionsPlaying('gravityCircle') ? {} : { scale: 1.1 }}
+            />
           </IconButton>
           <IconButton
             onClick={handleNewDroneHexagonClick}
             disabled={areOtherInstructionsPlaying('droneHexagon')}
           >
-            <motion.i className="fas fa-om" whileHover={{ scale: 1.1 }} />
+            <motion.i
+              className="fas fa-om"
+              whileHover={areOtherInstructionsPlaying('droneHexagon') ? {} : { scale: 1.1 }}
+            />
           </IconButton>
           <IconButton
             onClick={handleNewOneShotRectangleClick}
             disabled={areOtherInstructionsPlaying('oneShotRectangle')}
           >
-            <motion.i className="fas fa-bahai" whileHover={{ scale: 1.1 }} />
+            <motion.i
+              className="fas fa-bahai"
+              whileHover={areOtherInstructionsPlaying('oneShotRectangle') ? {} : { scale: 1.1 }}
+            />
           </IconButton>
           <IconButton onClick={handleDeleteAllBodiesClick}>
             <motion.i className="far fa-trash-alt" whileHover={{ scale: 1.1 }} />

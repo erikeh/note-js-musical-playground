@@ -2,22 +2,12 @@ import { createReducer, createAction } from '@reduxjs/toolkit';
 
 export const playedCircleInstructions = createAction('PLAYED_CIRCLE_INSTRUCTIONS');
 export const playedTriangleInstructions = createAction('PLAYED_TRIANGLE_INSTRUCTIONS');
-export const playedGravityCircleInstructions = createAction(
-  'PLAYED_GRAVITY_CIRCLE_INSTRUCTIONS'
-);
-export const playedOneShotRectangleInstructions = createAction(
-  'PLAYED_ONE_SHOT_INSTRUCTIONS'
-);
-export const playedDroneHexagonInstructions = createAction(
-  'PLAYED_DRONE_HEXAGON_INSTRUCTIONS'
-);
+export const playedGravityCircleInstructions = createAction('PLAYED_GRAVITY_CIRCLE_INSTRUCTIONS');
+export const playedOneShotRectangleInstructions = createAction('PLAYED_ONE_SHOT_INSTRUCTIONS');
+export const playedDroneHexagonInstructions = createAction('PLAYED_DRONE_HEXAGON_INSTRUCTIONS');
 
-export const playingCircleInstructions = createAction<boolean>(
-  'PLAYING_CIRCLE_INSTRUCTIONS'
-);
-export const playingTriangleInstructions = createAction<boolean>(
-  'PLAYING_TRIANGLE_INSTRUCTIONS'
-);
+export const playingCircleInstructions = createAction<boolean>('PLAYING_CIRCLE_INSTRUCTIONS');
+export const playingTriangleInstructions = createAction<boolean>('PLAYING_TRIANGLE_INSTRUCTIONS');
 export const playingGravityCircleInstructions = createAction<boolean>(
   'PLAYING_GRAVITY_CIRCLE_INSTRUCTIONS'
 );
