@@ -4,7 +4,7 @@ import Controls from './Controls';
 import { fixedSound, randomChord, drone1 } from './sounds';
 import { debounce } from 'debounce';
 import Matter, { Body, Engine, IEventCollision } from 'matter-js';
-import { backgroundColorGen } from '../utils/colorGen';
+import { generateBackgroundColor } from '../utils/colorGen';
 import {
   createCircle,
   createRandomTriangle,
@@ -85,7 +85,6 @@ export default function MatterMaker() {
   // }
 
   useEffect(() => {
-    console.log('innerwidth', window.innerWidth);
     // create a renderer
     const render = Render.create({
       element: canvasRef.current || document.body,
@@ -123,7 +122,7 @@ export default function MatterMaker() {
       const nextChordOption = collidedSquare.nextChord();
       collidedSquare.render.fillStyle = nextChordOption.color;
       collidedSquare.sound = nextChordOption.sound;
-      render.options.background = `#${backgroundColorGen()}`;
+      render.options.background = `#${generateBackgroundColor()}`;
     };
     const handleHexagonCollisionStart = (e: IEventCollision<Engine>) => {
       drone1.play();
@@ -153,6 +152,11 @@ export default function MatterMaker() {
     );
     const debouncedHandleHexagonCollisionStart = debounce(handleHexagonCollisionStart, 100, true);
 
+    /** library for collision handlers.
+     * MatterJS does not support per-body collision detection,
+     * recommnded solution was to iterate through all collision events
+     * and search for the one looking for, but creating handler "library"
+     * was much more efficient */
     const collisionStartHandlers = {
       circle: debouncedHandleCircleCollisionStart,
       triangle: debouncedHandleTriangleCollisionStart,
