@@ -1,12 +1,13 @@
 import { useEffect, useCallback } from 'react';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
+import { useAppSelector, useAppDispatch } from '../state/hooks';
 import { motion, useAnimation } from 'framer-motion';
-import allActions from '../actions/allActions';
+import allActions from '../state/actions/allActions';
 import styled from 'styled-components';
 
 const InstructionsContainer = styled(motion.h3)`
   position: absolute;
   top: 100px;
+  pointer-events: none;
 `;
 
 interface InstructionsProp {}

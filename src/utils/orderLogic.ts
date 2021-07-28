@@ -1,8 +1,6 @@
 import Matter from 'matter-js';
 import { SoundColorOptions } from './soundColorOptions';
 
-let keyMemo: number;
-
 // logic for selecting appropriate sound/color option
 export function selectRandomOption(options: SoundColorOptions) {
   const optionKeys = Object.keys(options);
@@ -13,6 +11,7 @@ export function selectRandomOption(options: SoundColorOptions) {
   return randomSoundColorOption;
 }
 
+let keyMemo: number;
 export function selectNextOption(options: SoundColorOptions) {
   const optionKeys = Object.keys(options);
   function nextIndex() {
@@ -30,11 +29,8 @@ export function selectNextOption(options: SoundColorOptions) {
 
 // logic for generating random index within given array of color codes
 let uniqueIndices: number[] = [];
-let uniqueIndexMemo: number;
-
 export function grabRandomUniqueIndex(colorOptions: string[]) {
   let idx: number;
-
   const generateUniqueIndices = (colors: string[]) => [...Array(colors.length).keys()];
   const createRandomIndexWithinRange = () => {
     return Math.floor(Math.random() * (uniqueIndices.length - 2));
@@ -43,11 +39,8 @@ export function grabRandomUniqueIndex(colorOptions: string[]) {
     uniqueIndices = generateUniqueIndices(colorOptions);
   }
   idx = createRandomIndexWithinRange();
-  console.log('idx', idx);
   const uniqueRandomIndex = uniqueIndices.splice(idx, 1)[0];
   uniqueIndices.push(uniqueRandomIndex);
-  console.log('unique index:', uniqueRandomIndex);
-  console.log('unique indicies: ', uniqueIndices);
   return uniqueRandomIndex;
 }
 

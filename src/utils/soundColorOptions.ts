@@ -100,7 +100,7 @@ export const soundColorOptionsPluck: SoundColorOptions = {
   },
 };
 
-export const soundColorOptionsDrone = {
+export const soundColorOptionsDrone: SoundColorOptions = {
   1: {
     sound: 'drone1.mp3',
     color: '#6D466B',
@@ -111,7 +111,7 @@ export const soundColorOptionsDrone = {
   },
 };
 
-export const soundColorOptionsChord = {
+export const soundColorOptionsChord: SoundColorOptions = {
   1: {
     sound: 'chord1.wav',
     color: '#D74E09',
@@ -125,7 +125,7 @@ export const soundColorOptionsChord = {
     color: '#254441',
   },
 };
-export const soundColorOptionsOneShot = {
+export const soundColorOptionsOneShot: SoundColorOptions = {
   1: {
     sound: 'oneshot1.wav',
     color: '#D74E09',
