@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Button } from 'react-bulma-components';
 import { motion } from 'framer-motion';
-import { useAppSelector } from '../app/hooks';
+import { useAppSelector } from '../state/hooks';
 
 interface ControlsProps {
   handleNewCircleClick: () => void;

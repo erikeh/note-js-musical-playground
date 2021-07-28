@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch } from '../state/hooks';
 import Controls from './Controls';
 import { fixedSound, randomChord, drone1 } from './sounds';
 import { debounce } from 'debounce';
 import Matter, { Body, Engine, IEventCollision } from 'matter-js';
-import { bgColorGen } from '../utils/colorGen';
+import { backgroundColorGen } from '../utils/colorGen';
 import {
   createCircle,
   createRandomTriangle,
@@ -15,7 +15,7 @@ import {
   TriangleSoundBody,
   RectangleSoundBody,
 } from '../utils/bodies';
-import allActions from '../actions/allActions';
+import allActions from '../state/actions/allActions';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 Matter.use('matter-attractors');
@@ -123,7 +123,7 @@ export default function MatterMaker() {
       const nextChordOption = collidedSquare.nextChord();
       collidedSquare.render.fillStyle = nextChordOption.color;
       collidedSquare.sound = nextChordOption.sound;
-      render.options.background = `#${bgColorGen()}`;
+      render.options.background = `#${backgroundColorGen()}`;
     };
     const handleHexagonCollisionStart = (e: IEventCollision<Engine>) => {
       drone1.play();

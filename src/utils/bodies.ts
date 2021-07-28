@@ -4,8 +4,8 @@ import {
   soundColorOptionsDrone,
   soundColorOptionsPluck,
   soundColorOptionsOneShot,
-  SoundColorOptions,
 } from './soundColorOptions';
+import { selectRandomOption, selectNextOption } from './orderLogic';
 
 Matter.use(MatterAttractors);
 
@@ -17,39 +17,6 @@ export interface TriangleSoundBody extends SoundBody {
 }
 export interface RectangleSoundBody extends SoundBody {
   nextChord: Function;
-}
-
-// helper functions
-function selectRandomOption(options: SoundColorOptions) {
-  const optionKeys = Object.keys(options);
-  const randomIndex = Math.floor(
-    Matter.Common.random(1, Number(optionKeys[optionKeys.length - 1]) + 1)
-  );
-  return options[randomIndex];
-}
-
-// useful data store
-let keyMemo: number;
-
-// function randomAngle() {
-//   let angle = Math.random() * Math.PI * 2;
-//   console.log(angle);
-//   return angle;
-// }
-
-function selectNextOption(options: SoundColorOptions) {
-  const optionKeys = Object.keys(options);
-  function nextIndex() {
-    if (!keyMemo || keyMemo + 1 > optionKeys.length) {
-      keyMemo = Number(optionKeys[0]);
-      return options[keyMemo];
-    } else {
-      keyMemo++;
-      return options[keyMemo];
-    }
-  }
-  const nextChordOption = nextIndex();
-  return nextChordOption;
 }
 
 // create bodies
@@ -101,6 +68,7 @@ export function createRandomTriangle(
   };
   return triangle as TriangleSoundBody;
 }
+
 export function createGravityCircle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
