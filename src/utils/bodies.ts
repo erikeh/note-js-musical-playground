@@ -6,6 +6,7 @@ import {
   soundColorOptionsOneShot,
 } from './soundColorOptions';
 import { selectRandomOption, selectNextOption } from './orderLogic';
+import { circleColorGen } from './colorGen';
 
 Matter.use(MatterAttractors);
 
@@ -34,6 +35,7 @@ export function createCircle(
     collisionFilter: {
       group: -1,
     },
+    label: 'circle',
     render: {
       fillStyle: option.color,
     },
@@ -53,7 +55,7 @@ export function createRandomTriangle(
     frictionAir: 0,
     friction: 0,
     frictionStatic: 0,
-    label: 'randomCircle',
+    label: 'triangle',
     collisionFilter: {
       group: -1,
     },
@@ -107,7 +109,7 @@ export function createDroneHexagon(
     collisionFilter: {
       group: -1,
     },
-    label: 'droneCircle',
+    label: 'hexagon',
     render: {
       fillStyle: option.color,
     },
@@ -128,6 +130,7 @@ export function createChordRectangle(
     collisionFilter: {
       group: -1,
     },
+    label: 'rectangle',
     render: {
       fillStyle: option.color,
     },

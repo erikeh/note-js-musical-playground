@@ -144,52 +144,45 @@ export default function MatterMaker() {
       });
     };
 
-    const debouncedHandleCircleCollisionStart = debounce(
-      handleCircleCollisionStart,
-      10,
-      true
-    );
-    const debouncedHandleTriangleCollisionStart = debounce(
-      handleTriangleCollisionStart,
-      10,
-      true
-    );
+    const debouncedHandleCircleCollisionStart = debounce(handleCircleCollisionStart, 10, true);
+    const debouncedHandleTriangleCollisionStart = debounce(handleTriangleCollisionStart, 10, true);
     const debouncedHandleRectangleCollisionStart = debounce(
       handleRectangleCollisionStart,
       800,
       true
     );
-    const debouncedHandleHexagonCollisionStart = debounce(
-      handleHexagonCollisionStart,
-      100,
-      true
-    );
+    const debouncedHandleHexagonCollisionStart = debounce(handleHexagonCollisionStart, 100, true);
+
+    const collisionStartHandlers = {
+      circle: debouncedHandleCircleCollisionStart,
+      triangle: debouncedHandleTriangleCollisionStart,
+      rectangle: debouncedHandleRectangleCollisionStart,
+      hexagon: debouncedHandleHexagonCollisionStart,
+    };
+
+    const collisionEndHandlers = {
+      hexagon: handleDroneCollisionEnd,
+    };
 
     // event listeners
     Events.on(engine, 'collisionStart', (e) => {
-      const pairs = e.pairs[0];
-      if (pairs.bodyB.label === 'Rectangle Body') {
-        debouncedHandleRectangleCollisionStart(e);
-      } else if (pairs.bodyB.label === 'droneCircle') {
-        debouncedHandleHexagonCollisionStart(e);
-      } else if (pairs.bodyB.label === 'randomCircle') {
-        debouncedHandleTriangleCollisionStart(e);
-      } else {
-        debouncedHandleCircleCollisionStart(e);
-      }
+      const collidedBody = e.pairs[0].bodyB;
+      const handler = collisionStartHandlers[collidedBody.label] || function () {};
+      handler(e);
     });
 
     Events.on(engine, 'collisionActive', (e) => {
       const bodyA = e.pairs[0].bodyA;
       const bodyB = e.pairs[0].bodyB;
       if (bodyA.label === 'gravityCircle' && bodyB.label === 'droneCircle') {
+        // leaving empty for other planned features
       }
     });
+
     Events.on(engine, 'collisionEnd', (e) => {
-      const bodyB = e.pairs[0].bodyB;
-      if (bodyB.label === 'droneCircle') {
-        handleDroneCollisionEnd(e);
-      }
+      const collidedBody = e.pairs[0].bodyB;
+      const handler = collisionEndHandlers[collidedBody.label] || function () {};
+      handler();
     });
 
     Events.on(engine, 'afterUpdate', () => {
