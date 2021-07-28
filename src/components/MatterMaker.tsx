@@ -189,6 +189,7 @@ export default function MatterMaker() {
       handler();
     });
 
+    // deletes bodies that move outside of the current screen range
     Events.on(engine, 'afterUpdate', () => {
       const height = render.options.height;
       const width = render.options.width;
@@ -217,17 +218,25 @@ export default function MatterMaker() {
     });
 
     Events.on(mouseConstraint, 'mousedown', (e) => {
-      const allBodies = Composite.allBodies(engine.world);
-      for (let body of allBodies) {
-        if (body.label === 'gravityCircle') {
-          Body.setStatic(body, false);
-        }
+      const clickedBody = e.source.body;
+      if (clickedBody?.label === 'gravityCircle') {
+        Body.setStatic(clickedBody, false);
+      } else {
+        return;
       }
+      // const allBodies = Composite.allBodies(engine.world);
+      // for (let body of allBodies) {
+      //   if (body.label === 'gravityCircle') {
+      //     Body.setStatic(body, false);
+      //   }
+      // }
+      //     }
+      //   }
     });
     Events.on(mouseConstraint, 'mouseup', (e) => {
       const allBodies = Composite.allBodies(engine.world);
       for (let body of allBodies) {
-        if (body.label === 'gravityCircle') {
+        if (body.label === 'gravityCircle' && !body.isStatic) {
           Body.setStatic(body, true);
         }
       }
