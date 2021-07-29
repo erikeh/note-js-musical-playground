@@ -74,7 +74,7 @@ export function createRandomTriangle(
 export function createGravityCircle(
   x = Math.random() * (window.innerWidth * 0.8),
   y = Math.random() * (window.innerHeight * 0.8),
-  radius = 90
+  radius = Math.random() * 90 + 50
 ) {
   return Matter.Bodies.circle(x, y, radius, {
     density: 1000000000000,
