@@ -1,5 +1,7 @@
 ## What is NoteJS?
 
+![](https://github.com/erikeh/erikeh-demo-assets/blob/master/noteJS-demo_jul29.gif)
+
 NoteJS is a gravity-based geometric musical playground, where the collision of various shapes will create different notes and sounds, based on the shape of the collision bodies themselves. No need for a musical background, all the shapes will eventually create a harmonious blend of pleasant tones, and visual flair.
 
 ## Why did you make this?
