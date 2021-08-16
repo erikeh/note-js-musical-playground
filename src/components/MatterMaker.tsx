@@ -171,7 +171,7 @@ export default function MatterMaker() {
     // event listeners
     Events.on(engine, 'collisionStart', (e) => {
       const collidedBody = e.pairs[0].bodyB;
-      const handler = collisionStartHandlers[collidedBody.label] || function () {};
+      const handler = (collisionStartHandlers as any)[collidedBody.label] || function () {};
       handler(e);
     });
 
@@ -185,7 +185,7 @@ export default function MatterMaker() {
 
     Events.on(engine, 'collisionEnd', (e) => {
       const collidedBody = e.pairs[0].bodyB;
-      const handler = collisionEndHandlers[collidedBody.label] || function () {};
+      const handler = (collisionEndHandlers as any)[collidedBody.label] || function () {};
       handler();
     });
 
@@ -224,15 +224,8 @@ export default function MatterMaker() {
       } else {
         return;
       }
-      // const allBodies = Composite.allBodies(engine.world);
-      // for (let body of allBodies) {
-      //   if (body.label === 'gravityCircle') {
-      //     Body.setStatic(body, false);
-      //   }
-      // }
-      //     }
-      //   }
     });
+
     Events.on(mouseConstraint, 'mouseup', (e) => {
       const allBodies = Composite.allBodies(engine.world);
       for (let body of allBodies) {
