@@ -22,6 +22,7 @@
     "howler": "^2.2.3",
     "matter-attractors": "^0.1.6",
     "matter-js": "^0.17.1",
+    "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
     "react-app-rewire-styled-components": "^3.0.2",
@@ -35,7 +36,7 @@
   "scripts": {
     "start:dev": "react-app-rewired start",
     "start:cra": "react-scripts start",
-    "start": "node src/server",
+    "start": "forever -o out.log -e err.log -w src/server",
     "build": "react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
