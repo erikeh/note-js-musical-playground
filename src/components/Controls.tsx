@@ -100,7 +100,7 @@ export default function Controls(props: ControlsProps) {
               whileHover={areOtherInstructionsPlaying('triangle') ? {} : { scale: 1.1 }}
             />
           </IconButton>
-          <IconButton
+          {/* <IconButton
             onClick={handleNewGravityCircleClick}
             disabled={areOtherInstructionsPlaying('gravityCircle')}
           >
@@ -108,7 +108,7 @@ export default function Controls(props: ControlsProps) {
               className="fas fa-circle"
               whileHover={areOtherInstructionsPlaying('gravityCircle') ? {} : { scale: 1.1 }}
             />
-          </IconButton>
+          </IconButton> */}
           <IconButton
             onClick={handleNewDroneHexagonClick}
             disabled={areOtherInstructionsPlaying('droneHexagon')}
